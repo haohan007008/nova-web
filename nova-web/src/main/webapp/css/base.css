@@ -1,0 +1,7 @@
+html{height:100%}
+body{min-height: 100%;position: relative;
+	font-size:14px;color:#333; background-color:#fff;margin:0px;padding:0px;
+	background:url(../images/bg.jpg);
+	overflow-x: hidden;
+	overflow-y: hidden;
+}

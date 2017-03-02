@@ -1,0 +1,18 @@
+@charset "utf-8";
+/* 你自己的样式 */
+
+.breadcrumb1{border-bottom: 1px solid #E5E5E5;background-color:#f5f5f5;line-height: 30px; height:34px;padding-left:10px;overflow:hidden}
+.breadcrumb1 span{padding:0 5px}
+
+.dataTables_empty{
+   text-align: center;
+}
+
+
+#searchresult {  
+	width: 230px;  position: absolute;  z-index: 1;  
+	overflow: hidden;  left: 130px;  top: 71px;  background: #E0E0E0;  border-top: none; 
+} 
+.line {  font-size: 12px;  background: #E0E0E0;  width: 130px;  padding: 2px; } 
+.hover {  background: #007ab8;  width: 130px;  color: #fff; } 
+.std {  width: 250px; }
