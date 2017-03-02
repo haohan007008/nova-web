@@ -1,5 +1,9 @@
 eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
 encoding//src/main/java/com/howbuy/fp/factor/FactorDAO.java=UTF-8
 encoding//src/main/java/com/howbuy/fp/factor/FundDAO.java=UTF-8
+encoding//src/main/java/com/howbuy/fp/user/UserDAO.java=UTF-8
 encoding//src/main/java/com/howbuy/fp/utils/Constants.java=UTF-8
 encoding//src/main/java/com/howbuy/fp/utils/SqlHelper.java=UTF-8
+encoding//src/main/webapp/login.jsp=UTF-8
+encoding//src/test/java=UTF-8

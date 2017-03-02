@@ -5,55 +5,9 @@
 		<variable name="data_page_size">50</variable>
 	</variables>	
 	<scripts>	
-		<script name="getFactorsBypg">
+		<script name="userlogin">
 			<![CDATA[
-				select a.id,
-               a.secu_code,
-               a.secu_market,
-               a.netvalue,
-               a.changeratio,
-               a.port10r,
-               a.hs300r,
-               a.zxbr,
-               a.cybr,
-               a.alpha,
-               a.belta1,
-               a.belta2,
-               a.belta3,
-               a.belta4,
-               to_char(a.xgsj,'yyyy-mm-dd hh:mi:ss') xgsj,
-               a.trade_date,
-               rownum rn_
-	          from T_FUND_ESTIMATE a where 1=1 
-			 ]]>
-		</script>
-		<script name="getFactorsCount">
-			<![CDATA[
-				select count(1)
-	          from T_FUND_ESTIMATE a where 1=1 
-			 ]]>
-		</script>
-		<script name="getFactorsDiff">
-			<![CDATA[
-				select * from (
-					select a.trade_date,
-					       a.alpha - b.alpha alpha,
-					       a.belta1-b.belta1 belta1,
-					       a.belta2-b.belta2 belta2,
-					       a.belta3-b.belta3 belta3,
-					       a.belta4-b.belta4 belta4,
-					       rownum rn_
-					from T_FUND_ESTIMATE a,funddb.T_FUND_ESTIMATE b
-					 where a.secu_code = ? and a.secu_code = b.secu_code and a.trade_date = b.trade_date
-					  order by a.trade_date desc) r where r.rn_ <= ? order by trade_date asc
-			 ]]>
-		</script>
-		
-		<script name="getFundListTop10">
-			<![CDATA[
-				select a.jjdm,a.jjmc,b.typename from jjxx1 a, funddb.datadict b
-				 where a.cpfl = 2 and a.jjfl = b.history_code_rmk and b.remarks = '基金理财产品概况1'
-				 and jjdm like '?' and rownum <=10 order by jjdm
+				select * from p_staff A where a.loginName = ? and a.loginPwd =? AND a.isVaild = 0
 			 ]]>
 		</script>
 		
