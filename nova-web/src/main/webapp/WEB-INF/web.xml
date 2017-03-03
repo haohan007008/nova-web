@@ -4,7 +4,7 @@
 	version="3.0">
 	<display-name>nova-web</display-name>
 	<welcome-file-list>
-		<welcome-file>login.do</welcome-file>
+		<welcome-file>index.do</welcome-file>
 	</welcome-file-list>
 
 	<filter>
@@ -19,6 +19,16 @@
             <param-value>true</param-value>  
         </init-param>
 	</filter>
+	
+	<filter>
+		<filter-name>appfilter</filter-name>
+		<filter-class>com.howbuy.fp.user.AppFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>appfilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
