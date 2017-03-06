@@ -36,6 +36,7 @@
 				<li><a href="#">退出</a></li>
 			</ul>
 		</li>
+		<li id="Hui-shop"> <a href="#" title="我的下单"><span class="badge badge-danger">5</span><i class="Hui-iconfont" style="font-size:18px">&#xe6b9;</i></a> </li>
 		<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
 		<li id="Hui-skin" class="dropDown right dropDown_hover"><a href="javascript:;" title="换肤"><i class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
 			<ul class="dropDown-menu radius box-shadow">
@@ -125,7 +126,7 @@
 	<div id="iframe_box" class="Hui-article">
 		<div class="show_iframe">
 			<div style="display:none" class="loading"></div>
-			<iframe scrolling="yes" frameborder="0" src="status.jsp"></iframe>
+			<iframe scrolling="yes" frameborder="0" src="welcome.jsp"></iframe>
 		</div>
 	</div>
 </section>

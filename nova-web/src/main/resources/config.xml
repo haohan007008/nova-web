@@ -10,6 +10,20 @@
 				select * from p_staff A where a.loginName = ? and a.loginPwd =? AND a.isVaild = 0
 			 ]]>
 		</script>
-		
+		<script name="getproducts">
+			<![CDATA[
+				select p.*,d.dictval catalog_name from c_product p,p_dict d 
+				where p.prdName like ?
+				and d.dictName = 'catalog'
+				and p.catalog = d.dictKey
+				limit ?,?
+			 ]]>
+		</script>
+		<script name="getproductsCount">
+			<![CDATA[
+				select count(1) from c_product p
+				where p.prdName like ?
+			 ]]>
+		</script>
 	</scripts>
 </config>
