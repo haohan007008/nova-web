@@ -311,3 +311,68 @@ function removeIframe1(){
 	tab.eq(i).remove();
 	iframe.eq(i).remove();
 }
+
+/*
+ * 手动添加tab页方法
+ * */
+function receiveMessage(e) { 
+	var data = e.data;
+	if(!data.type)
+		addTab(data.id,data.title,data.url);
+	else if(data.type == 'mycart'){
+		updateCart(data.total);
+	}
+}
+if (typeof window.addEventListener != 'undefined') {//使用html5 的postMessage必须处理的 
+	window.addEventListener('message', receiveMessage, false); 
+} else if (typeof window.attachEvent != 'undefined') { 
+	window.attachEvent('onmessage', receiveMessage); 
+} 
+
+function updateCart(n){
+	$("#mycart").html(n);
+}
+
+function addTab(id,name,url){
+		if(url){
+			var bStop=false;
+			var bStopIndex=0;
+			var _href=url;
+			var _titleName=name;
+			var topWindow=$(window.parent.document);
+			var show_navLi=topWindow.find("#min_title_list li");
+			show_navLi.each(function() {
+				if($(this).find('span').attr("id")==id){
+					bStop=true;
+					bStopIndex=show_navLi.index($(this));
+					return false;
+				}
+			});
+			if(!bStop){
+				creatIframeExt(_href,_titleName,id);
+				min_titleList();
+			}
+			else{
+				show_navLi.removeClass("active").eq(bStopIndex).addClass("active");
+				var iframe_box=topWindow.find("#iframe_box");
+				iframe_box.find(".show_iframe").hide().eq(bStopIndex).show().find("iframe").attr("src",_href);
+			}
+		}
+	}
+function creatIframeExt(href,titleName,id){
+	var topWindow=$(window.parent.document);
+	var show_nav=topWindow.find('#min_title_list');
+	show_nav.find('li').removeClass("active");
+	var iframe_box=topWindow.find('#iframe_box');
+	show_nav.append('<li class="active"><span id="'+id+'" data-href="'+href+'">'+titleName+'</span><i></i><em></em></li>');
+	tabNavallwidth();
+	var iframeBox=iframe_box.find('.show_iframe');
+	iframeBox.hide();
+	iframe_box.append('<div class="show_iframe"><div class="loading"></div><iframe frameborder="0" src='+href+'></iframe></div>');
+	var showBox=iframe_box.find('.show_iframe:visible');
+	showBox.find('iframe').attr("src",href).load(function(){
+		showBox.find('.loading').hide();
+	});
+}
+
+

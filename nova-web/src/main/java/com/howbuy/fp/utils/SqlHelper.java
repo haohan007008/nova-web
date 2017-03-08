@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
+import org.springframework.objenesis.instantiator.basic.NewInstanceInstantiator;
 import org.springframework.stereotype.Repository;
 
 import com.alibaba.fastjson.JSON;
@@ -317,7 +318,7 @@ public class SqlHelper {
             if (rs.next()) {
             	htData = new Hashtable<String, Object>(columnCount);
             	for (int i = 1; i <= columnCount; i++) {
-            		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? new Object():rs.getObject(i));   
+            		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? new String("Null"):rs.getObject(i));   
             	} 
             }
         } catch (SQLException e) {

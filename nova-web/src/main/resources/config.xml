@@ -25,5 +25,20 @@
 				where p.prdName like ?
 			 ]]>
 		</script>
+		
+		<script name="getproductById">
+			<![CDATA[
+				select p.*,d.dictval catalog_name from c_product p,p_dict d 
+				where p.Id = ?
+				and d.dictName = 'catalog'
+				and p.catalog = d.dictKey
+			 ]]>
+		</script>
+		
+		<script name="getProductColorById">
+			<![CDATA[
+				select * from c_produt_color pc where pc.prdID = ?
+			 ]]>
+		</script>
 	</scripts>
 </config>

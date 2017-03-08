@@ -29,7 +29,7 @@
 <p class="f-20 text-success">欢迎使用FP元数据维护工具 <span class="f-14">v2.3</span>！<span class="r mr-30"> 
 
 			<input type="text" name="prdno" id="prdno" placeholder=" 商品查询" style="width:250px" class="input-text">
-			<button name="prdrearch" id="prdrearch" class="btn btn-success" type="button">
+			<button name="prdrearch" id="prdrearch" class="btn btn-success" type="button" onclick="search()">
 			<i class="Hui-iconfont">&#xe665;</i> </button>
 			<button name="refresh" id="refresh" class="btn btn-success" type="button">
 			<i class="Hui-iconfont">&#xe68f;</i> </button>
@@ -48,5 +48,12 @@ Copyright &copy;2015 H-ui.admin v2.3 All Rights Reserved.<br>
 </footer>
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/H-ui.js"></script>
+<script type="text/javascript">
+	function search(){
+		var t=window.parent; 
+		if(t)
+		t.postMessage({id:'product_list',title:'商品查询',url:'getproducts.do?prdName='+ $('#prdno').val()}, '*'); 
+	}
+</script>
 </body>
 </html>
