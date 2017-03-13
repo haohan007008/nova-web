@@ -330,7 +330,9 @@ if (typeof window.addEventListener != 'undefined') {//使用html5 的postMessage
 } 
 
 function updateCart(n){
-	$("#mycart").html(n);
+	if(n == 0)
+		$("#mycart").html('');
+	else $("#mycart").html(n);
 }
 
 function addTab(id,name,url){

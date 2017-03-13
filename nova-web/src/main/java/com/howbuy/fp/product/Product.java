@@ -15,12 +15,20 @@ public class Product {
 	private String catalog ;
 	private String prdType;
 	private String prdImg;
+	private String prdSmallImg;
+	
 	private BigDecimal matWgt;
 	private BigDecimal price;
 	private BigDecimal batchPrice;
 	private String remark;
 	private List<ProductColorItem> items;
-	
+	public String getPrdSmallImg() {
+		return prdSmallImg;
+	}
+
+	public void setPrdSmallImg(String prdSmallImg) {
+		this.prdSmallImg = prdSmallImg;
+	}
 	public void unionItems(List<ProductColorItem> its){
 		if(its != null && its.size()>0){
 			for (int i = 0; i < its.size(); i++) {

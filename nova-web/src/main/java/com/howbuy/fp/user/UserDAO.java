@@ -54,6 +54,10 @@ public class UserDAO {
 			userVO.setTelphone1(hst.get("telphone1").toString());
 			userVO.setTelphone2(hst.get("telphone2").toString());
 			userVO.setLoginName(hst.get("loginName").toString());
+			userVO.setDeptName(hst.get("deptName").toString());
+			userVO.setLoginCount(Integer.parseInt(hst.get("cnt").toString()));
+			userVO.setLastLoginDate(hst.get("timestamp").toString());
+			userVO.setLastLoginIP(hst.get("loginIp").toString());
 			return userVO;
 		}else {
 			return null;
@@ -61,5 +65,66 @@ public class UserDAO {
 		
 	}
 	
+	public List<RoleVO> getRoles(int staffId){
+		List<RoleVO> roles = new ArrayList<>();
+		List<Object> parameters = new ArrayList<>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getroles");
+		log.debug("execute sql:" + sql );
+		parameters.add(staffId);
+		log.debug("parameters:" + JSON.toJSONString(parameters));
+		
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, parameters);
+		
+		if(hst!=null && hst.size() > 0){
+			for (int i = 0; i < hst.size(); i++) {
+				Hashtable<String, Object> ht = hst.get(i);
+				RoleVO role = new RoleVO();
+				role.setId(Integer.parseInt(ht.get("Id").toString()));
+				role.setRoleName(ht.get("roleName").toString());
+				roles.add(role);
+			}
+		}
+		return roles;
+	}
 	
+	public List<PermVO> getPerms(int staffId){
+		List<PermVO> perms = new ArrayList<>();
+		List<Object> parameters = new ArrayList<>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getperms");
+		log.debug("execute sql:" + sql );
+		parameters.add(staffId);
+		log.debug("parameters:" + JSON.toJSONString(parameters));
+		
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, parameters);
+		
+		if(hst!=null && hst.size() > 0){
+			for (int i = 0; i < hst.size(); i++) {
+				Hashtable<String, Object> ht = hst.get(i);
+				PermVO perm = new PermVO();
+				perm.setId(Integer.parseInt(ht.get("Id").toString()));
+				perm.setPermName(ht.get("permName").toString());
+				perm.setPermUrl(ht.get("permUrl").toString());
+				perm.setpId(ht.get("pId").toString());
+				perm.setIcon(ht.get("icon").toString());
+				perm.setPermType(ht.get("permType").toString());
+				perms.add(perm);
+			}
+		}
+		return perms;
+	}
+	
+	public void log(int staffId,String action,String ip){
+		List<Object> parameters = new ArrayList<>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("logs");
+		log.debug("execute sql:" + sql );
+		parameters.add(staffId);
+		parameters.add(ip);
+		parameters.add(action);
+		log.debug("parameters:" + JSON.toJSONString(parameters));
+		
+		this.sqlHelper.executeUpdate(sql, parameters);
+	}
 }	

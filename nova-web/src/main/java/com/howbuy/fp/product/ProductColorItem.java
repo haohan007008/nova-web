@@ -14,6 +14,37 @@ public class ProductColorItem {
 	private int nxl = 0;
 	private int nxxl = 0;
 	
+	
+	private int prdNum = 0;
+	public int getPrdNum() {
+		return prdNum;
+	}
+
+	public void setPrdNum(int prdNum) {
+		this.prdNum = prdNum;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public double getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(double subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	private double price = 0;
+	private double subTotal = 0;
+	
+	
+	
 	public int getPrdId() {
 		return prdId;
 	}
@@ -29,6 +60,8 @@ public class ProductColorItem {
 	public double getTotalCost(double price){
 		return getTotalCount() * price;
 	}
+	
+	
 	
 	public int getId() {
 		return Id;

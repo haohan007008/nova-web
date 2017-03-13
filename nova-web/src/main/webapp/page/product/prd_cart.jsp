@@ -35,22 +35,25 @@
 	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 产品列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="pd-20">
 		
-		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r"> <a class="btn btn-primary radius" onclick="refresh_table()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加到购物车</a>&nbsp;<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe672;</i> 提交下单</a> </span> <span class="l">共有数据：<strong>54</strong> 条</span> </div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r"> <a class="btn btn-primary radius" onclick="order(1)"  href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 保存订单</a>&nbsp;<a href="javascript:;" onclick="order(2)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe672;</i> 提交下单</a> </span> 
+		<span class="l">订货总数：<strong id="l_total_cnt">0</strong> 件，合计金额：<strong id="l_total_m" class="c-red">0</strong>元</span>，应付定金：<strong id="l_total_d" class="c-red">0</strong>元</span> </div>
 		
 		<div class="row cl mt-20">
-					<label class="form-label col-1 text-r"><span class="c-red">*</span>网站名称：</label>
-					<div class="formControls col-5">
-						<input type="text" id="website-title" placeholder="控制在25个字、50个字节以内" value="" class="input-text">
-					</div>
-					<label class="form-label col-1 text-r"><span class="c-red">*</span>网站名称：</label>
-					<div class="formControls col-5">
-						<input type="text" id="website-title" placeholder="控制在25个字、50个字节以内" value="" class="input-text">
+					<label class="form-label col-1 text-r"><span class="c-red">*</span>客户名称：</label>
+					<div class="formControls col-4">
+						<input type="text" id="cust_name" placeholder="控制在25个字、50个字节以内" value="" class="input-text radius">
 					</div>
 				</div>
 				<div class="row cl  mt-20">
-					<label class="form-label col-2"><span class="c-red">*</span>关键词：</label>
+					<label class="form-label col-1 text-r"><span class="c-red">*</span>地址：</label>
 					<div class="formControls col-10">
-						<input type="text" id="website-Keywords" placeholder="5个左右,8汉字以内,用英文,隔开" value="" class="input-text">
+						<input type="text" id="cust_addr" placeholder="控制在25个字、50个字节以内" value="" class="input-text radius">
+					</div>
+				</div>
+				<div class="row cl  mt-20">
+					<label class="form-label col-1 text-r"><span class="c-red">*</span>备注：</label>
+					<div class="formControls col-10">
+						<input type="text" id="cust_remark" placeholder="需要特别说明的内容" value="" class="textarea radius">
 					</div>
 				</div>
 
@@ -102,8 +105,8 @@
 							<td rowspan="<%=itemSize %>"><a onClick="" href="javascript:;"><img width="60"  height="60" class="product-thumb" src="/nova-web/<%=product.getPrdImg() %>"></a></td>
 							<td rowspan="<%=itemSize %>"><a style="text-decoration:none" onClick="" href="javascript:;"><%=product.getPrdName() %></td>
 							<%} %>
-							<td><%=pItem.getColorName() %></td>
-							<td><%=pItem.getColorNo() %></td>
+							<td><%=pItem.getColorName() %><input type="hidden" value="<%=product.getId() %>"></td>
+							<td><%=pItem.getColorNo() %><input type="hidden" value="<%=pItem.getId() %>"></td>
 							<td><input type="text" class="input-text text-c" value="<%=pItem.getNs() %>"></td>
 							<td><input type="text" class="input-text text-c" value="<%=pItem.getNm() %>"></td>
 							<td><input type="text" class="input-text text-c" value="<%=pItem.getNl() %>"></td>
@@ -140,7 +143,7 @@
 						<th id="total_cnt"></th>
 						<th></th>
 						<th></th>
-						<th><span class="price c-red" id="total_m">92125.00</span></th>
+						<th><span class="price c-red" id="total_m"></span></th>
 						<th></th>
 					</tr>
 				</tfoot>
@@ -167,6 +170,19 @@ function product_del(obj,id){
 }
 
 function del_tr(prdId,colorId){
+	$.ajax({ 
+        type:"get", 
+        url:"product/delcart.do?pid="+prdId+"&cid="+colorId,
+        dataType:"json",      
+        contentType:"application/json", 
+        success:function(data){ 
+        	if(data.success){
+        		delOnView(prdId,colorId);
+        	}
+        } 
+     }); 
+}
+function delOnView(prdId,colorId){	  
 	  //$(obj).parent().parent();.remove();
 	  var tds = $("#p_"+prdId+"_"+colorId).find('td');
 	  
@@ -188,7 +204,7 @@ function del_tr(prdId,colorId){
 		  tds[3].rowSpan = tds[3].rowSpan -1;
 	  }
 	  $("#p_"+prdId+"_"+colorId).remove();
-	  refresh_table()
+	  refresh_table();
 }
 
 
@@ -200,6 +216,80 @@ $(function () {
 	});
 	refresh_table();
 });
+
+function order(nextAction){
+	var order = {
+			custName: $('#cust_name').val(),
+			shipAddress: $('#cust_addr').val(),
+			remark: $('#cust_remark').val(),
+			curNode:nextAction,
+			items : getDataSet()
+			
+	};
+	alert(JSON.stringify(order));
+	if(order){
+		$.ajax({ 
+	        type:"POST", 
+	        url:"order/addorder.do?dt="+new Date(), 
+	        dataType:"json",      
+	        contentType:"application/json",               
+	        data:JSON.stringify(order), 
+	        success:function(data){ 
+	        	if(data.success){
+	        		layer.msg('下单成功！',{icon:1,time:2000}); 
+	        		//var t=window.parent; 
+	        		if(window.parent)
+	        			window.parent.postMessage({type:'mycart',total:0}, '*');
+	        		location.replace(location.href);
+	        	}else 
+	        		layer.msg('下单失败！请联系管理员！-'+data.desc,{icon:2,time:2000}); 
+	        } 
+	     }); 
+	}else layer.msg('请至少选择一件商品！',{icon:2,time:2000}); 
+	
+}
+
+function getDataSet(){
+	var trs = $("#mycart > tbody").find('tr');
+	var data = [];
+	for(var i=0;i<trs.length;i++){
+		var tds = trs[i].children;
+		var s_cnt = 0;
+		var l = 0
+		if(tds.length > 12)
+			l = 4;
+		var rd = {};
+		rd.prdId = tds[0+l].children[0].value;
+		rd.colorName = tds[0+l].innerText;
+		rd.colorNo = tds[1+l].innerText;
+		rd.id = tds[1+l].children[0].value;
+		var cnt = 0;
+		if(tds[2+l].children[0].value || tds[2+l].children[0].value !=''){
+			rd.ns= tds[2+l].children[0].value*1;
+			cnt += rd.ns;
+		}
+		if(tds[3+l].children[0].value || tds[3].children[0+l].value !=''){
+			rd.nm= tds[3+l].children[0].value*1;
+			cnt += rd.nm;
+		}
+		if(tds[4+l].children[0].value || tds[4+l].children[0].value !=''){
+			rd.nl= tds[4+l].children[0].value*1;
+			cnt += rd.nl;
+		}
+		if(tds[5+l].children[0].value || tds[5+l].children[0].value !=''){
+			rd.nxl =tds[5+l].children[0].value*1;
+			cnt += rd.nxl;
+		}
+		if(tds[6+l].children[0].value || tds[6+l].children[0].value !=''){
+			rd.nxxl =tds[6+l].children[0].value*1;
+			cnt += rd.nxxl;
+		}
+		
+		if(cnt > 0 )
+			data[data.length] = rd;
+	}
+	return data;
+}
 
 function refresh_table(){
 	var trs = $("#mycart > tbody").find('tr');
@@ -253,11 +343,16 @@ function refresh_table(){
 	$("#cnt_xl").html(cnt_xl);
 	$("#cnt_xxl").html(cnt_xxl);
 	$("#total_cnt").html(total);
+	$("#l_total_cnt").html(total);
 	//alert(total +":" + totalPay + ":" + totalDiscountPay)
 	if(total >= 30){
 		$("#total_m").html(totalDiscountPay);
+		$("#l_total_m").html(totalDiscountPay);
+		$("#l_total_d").html(totalDiscountPay*0.4);
 	}else {
 		$("#total_m").html(totalPay);
+		$("#l_total_m").html(totalPay);
+		$("#l_total_d").html(totalPay*0.4);
 	}
 }
 

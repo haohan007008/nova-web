@@ -4,10 +4,148 @@
 		<variable name="dubbo_config_xml"><![CDATA[classpath*:/conf/applicationContext-dubbo.xml]]></variable>
 		<variable name="data_page_size">50</variable>
 	</variables>	
-	<scripts>	
+	<scripts>
+		<script name="getOrderByID">
+			<![CDATA[
+				select o.*,fn.nodeName,f.name as creator ,f1.name as curOper
+					from r_order o,f_flownode fn,p_staff f,p_staff f1
+				where  o.curNode = fn.id
+				and f.Id = o.staffId and f1.Id = o.curOperator and o.id = ?
+			 ]]>
+		</script>
+		<script name="getOrderItemsByOrderId">
+			<![CDATA[
+				select * from r_orderitem where orderId = ? order by prdId,prdColorId
+			 ]]>
+		</script>
+		<script name="getOrders">
+			<![CDATA[
+				SELECT * from (select o.id,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,
+					o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp,o.oprState
+					from r_order o,f_flownode fn,p_staff f,p_staff f1
+				where  o.curNode = fn.id
+				and f.Id = o.staffId and f1.Id = o.curOperator ) a where 1=1
+			 ]]>
+		</script>
+		<script name="getOrdersCount">
+			<![CDATA[
+				SELECT count(*) from (select o.id,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp
+					from r_order o,f_flownode fn,p_staff f,p_staff f1
+				where  o.curNode = fn.id
+				and f.Id = o.staffId and f1.Id = o.curOperator ) a where 1=1
+			 ]]>
+		</script>
+		<script name="myOperOrdersCount">
+			<![CDATA[
+				select count(1)
+					from r_order o
+				where o.curOperator = ?
+			 ]]>
+		</script>
+		
+		<script name="myOrdersCount">
+			<![CDATA[
+				select count(1)
+					from r_order o
+				where o.staffId = ?
+			 ]]>
+		</script>
+		
+		<script name="addorder">
+			<![CDATA[
+				insert into r_order(Id,name,flowId,curNode,custName,staffId,totalPay,prePay,totalPrd,shipAddress,curOperator)
+				VALUES(?,?,?,?,?,?,?,?,?,?,?)
+			 ]]>
+		</script>
+		<script name="addorderitem">
+			<![CDATA[
+				insert into r_orderitem(orderId,prdId,prdColorId,prdColorNo,prdColorName,nxxl,nxl,nl,nm,ns,prdNum,price,subTotal)
+				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+			 ]]>
+		</script>
+		<script name="lastId">
+			<![CDATA[
+				select max(id)+1 from r_order
+			 ]]>
+		</script>
+		
+		<script name="getNextOperator">
+			<![CDATA[
+				select rf.staffId from f_flownode fn,p_rolestaff rf 
+				where rf.roleId = fn.roleId
+				and fn.flowId = ? and fn.id = ?
+			 ]]>
+		</script>
+		
+		<script name="updateorderitems">
+			<![CDATA[
+			update r_orderitem o set o.prdNum = o.nxxl + o.nxl + o.nl + o.nm + o.ns ,
+				o.price = (select if((o.nxxl + o.nxl + o.nl + o.nm + o.ns) >= 30,p.batchPrice,p.price) from c_product p where p.id = o.prdId),
+				o.subtotal = (select (if((o.nxxl + o.nxl + o.nl + o.nm + o.ns) >= 30,p.batchPrice,p.price))*(nxxl + o.nxl + o.nl + o.nm + o.ns)
+						from c_product p where p.id = o.prdId) 
+			where o.orderId = ?
+			]]>
+		</script>
+		<script name="updateorder">
+			<![CDATA[
+			update r_order o 
+				set o.totalPay = (select sum(subTotal) from r_orderitem i where i.orderId = o.id),
+					  o.prePay = (select sum(subTotal)*0.4 from r_orderitem i where i.orderId = o.id),
+						o.lastPay = (select sum(subTotal)*0.6 from r_orderitem i where i.orderId = o.id),
+						o.totalPrd = (select sum(prdNum) from r_orderitem i where i.orderId = o.id)
+				where  id = ?
+			]]>
+		</script>
+		
+		<script name="deleteorder">
+			<![CDATA[
+			delete r_order o where o.id = ?
+			]]>
+		</script>
+		<script name="deleteorderitem">
+			<![CDATA[
+			delete r_orderitem o where o.orderId = ?
+			]]>
+		</script>
+		<script name="loginfo">
+			<![CDATA[
+				select max(timestamp) timestamp,
+						count(*) cnt,
+						(select s.loginIp from s_syslog s where s.staffId = a.staffId ORDER BY timestamp DESC LIMIT 1 )loginIp
+			 	from s_syslog a where a.staffId = ?
+			 ]]>
+		</script>
+		<script name="logs">
+			<![CDATA[
+				insert into s_syslog(staffId,loginIp,action)values(?,?,?)
+			 ]]>
+		</script>
 		<script name="userlogin">
 			<![CDATA[
-				select * from p_staff A where a.loginName = ? and a.loginPwd =? AND a.isVaild = 0
+				select a.Id,a.name,a.deptId,a.telphone1,a.telphone2,a.loginName,d.deptName,max(l.timestamp) timestamp,sum(1) cnt,
+					(select s.loginIp from s_syslog s where s.staffId = l.staffId  ORDER BY timestamp DESC LIMIT 1 ) loginIp
+					 from p_staff a
+					  INNER JOIN p_deptstaff df ON df.staffId = a.id
+					  INNER JOIN p_dept d ON d.id = df.deptId 
+						left join s_syslog l on a.id = l.staffId
+					WHERE  a.loginName = ? and a.loginPwd =? AND a.isVaild = 0
+					GROUP BY a.Id,a.name,a.deptId,a.telphone1,a.telphone2,a.loginName,d.deptName
+			 ]]>
+		</script>
+		<script name="getperms">
+			<![CDATA[
+				select p.Id,p.permName,p.permUrl,p.remark,p.pId,p.orderIndex,p.icon,p.permType
+				from p_rolestaff rf,p_roleperm rp ,
+					p_permission p
+				where rf.staffId = ?
+				and rf.roleId = rp.roleId
+				and rp.permId = p.id
+				order by p.orderIndex 
+			 ]]>
+		</script>
+		<script name="getroles">
+			<![CDATA[
+				select r.* from p_roles r,p_rolestaff rf where r.Id = rf.roleId and rf.staffId=?
 			 ]]>
 		</script>
 		<script name="getproducts">

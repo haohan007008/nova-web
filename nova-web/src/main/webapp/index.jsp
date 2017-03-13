@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -26,20 +28,34 @@
 </head>
 <body>
 <header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/">盘中估值  - admin</a> <a class="Hui-logo-m l" href="/" title="H-ui.admin">Monitor</a> <span class="Hui-subtitle l">V1.0</span>
-	
+	<c:if test="${user!=null && user.perms!=null && fn:length(user.perms) > 0}">
+	<nav class="mainnav cl" id="Hui-nav">
+		<ul>
+			<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe600;</i> 快捷入口 <i class="Hui-iconfont">&#xe6d5;</i></a>
+				<ul class="dropDown-menu radius box-shadow">
+				   <c:forEach items="${user.perms}" var="p">
+				   <c:if test="${p!=null && p.permType != null &&p.permType eq 'shortcut'}">
+					<li><a href="javascript:;" onclick="addTab('shortcut${p.id}','${p.permName}','${p.permUrl}')"><i class="Hui-iconfont">${p.icon}</i> ${p.permName}</a></li>
+					</c:if>
+				</c:forEach>
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	</c:if>
 	<ul class="Hui-userbar">
-		<li>超级管理员</li>
-		<li class="dropDown dropDown_hover"><a href="#" class="dropDown_A">admin <i class="Hui-iconfont">&#xe6d5;</i></a>
+		<li>${user.userName}</li>
+		<li class="dropDown dropDown_hover"><a href="#" class="dropDown_A"><i class="Hui-iconfont" style="font-size:18px">&#xe705;</i></a>
 			<ul class="dropDown-menu radius box-shadow">
 				<li><a href="#">个人信息</a></li>
 				<li><a href="#">切换账户</a></li>
-				<li><a href="#">退出</a></li>
+				<li><a href="logout.do">退出</a></li>
 			</ul>
 		</li>
 		<li id="Hui-shop"> <a href="#" onclick="addTab('mycart','购物车','productcart.do')" title="我的下单">
 			<span class="badge badge-danger" id="mycart"></span>
 			<i class="Hui-iconfont" style="font-size:18px">&#xe6b9;</i></a> </li>
-		<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
+		<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger"  id="myorder">${user.myOrderCount} </span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
 		<li id="Hui-skin" class="dropDown right dropDown_hover"><a href="javascript:;" title="换肤"><i class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
 			<ul class="dropDown-menu radius box-shadow">
 				<li><a href="javascript:;" data-val="default" title="默认（黑色）">默认（黑色）</a></li>
@@ -56,63 +72,24 @@
 <aside class="Hui-aside">
 	<input runat="server" id="divScrollValue" type="hidden" value="" />
 	<div class="menu_dropdown bk_2">
-	<dl id="menu-repush">
-			<dt><i class="Hui-iconfont">&#xe613;</i> 
-			<a _href="dslist.html" data-title="估值重推" href="javascript:void(0)">估值重推</a></dt>
-		</dl>
-	<dl id="menu-recalc">
-			<dt><i class="Hui-iconfont">&#xe613;</i> 
-			<a _href="dslist.html" data-title="估值重算" href="javascript:void(0)">估值重算</a></dt>
-		</dl>
-	<dl id="menu-article">
-			<dt><i class="Hui-iconfont">&#xe616;</i> 数据查询<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a _href="factor/list.do" data-title="系数查询" href="javascript:void(0)">系数查询</a></li>
-					<li><a _href="factor/factorcompare.do" data-title="系数比较" href="javascript:void(0)">系数比较</a></li>
-					<li><a _href="templatelist.html" data-title="推送模板管理" href="javascript:void(0)">估值查询</a></li>
-					<li><a _href="kanban/kanban.jsp" data-title="看板" href="javascript:void(0)">行情数据查询</a></li>
-					
-				</ul>
-			</dd>
-		</dl>
-		
-		<dl id="menu-product">
-			<dt><i class="Hui-iconfont">&#xe620;</i> 日志查询<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a _href="v2.3/product-brand.html" data-title="应用概况" href="javascript:void(0)">应用概况</a></li>
-					<li><a _href="v2.3/product-category.html" data-title="版本变更记录" href="javascript:void(0)">版本变更记录</a></li>
-				</ul>
-			</dd>
-		</dl>
-		
-		<dl id="menu-tongji">
-			<dt><i class="Hui-iconfont">&#xe61a;</i> 系统统计<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a _href="v2.3/charts-1.html" data-title="折线图" href="javascript:void(0)">折线图</a></li>
-					<li><a _href="v2.3/charts-2.html" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>
-					<li><a _href="v2.3/charts-3.html" data-title="区域图" href="javascript:void(0)">区域图</a></li>
-					<li><a _href="v2.3/charts-4.html" data-title="柱状图" href="javascript:void(0)">柱状图</a></li>
-					<li><a _href="v2.3/charts-5.html" data-title="饼状图" href="javascript:void(0)">饼状图</a></li>
-					<li><a _href="v2.3/charts-6.html" data-title="3D柱状图" href="javascript:void(0)">3D柱状图</a></li>
-					<li><a _href="v2.3/charts-7.html" data-title="3D饼状图" href="javascript:void(0)">3D饼状图</a></li>
-				</ul>
-			</dd>
-		</dl>
-		<dl id="menu-system">
-			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a _href="v2.3/system-base.html" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
-					<li><a _href="v2.3/system-category.html" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>
-					<li><a _href="v2.3/system-data.html" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
-					<li><a _href="v2.3/system-shielding.html" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>
-					<li><a _href="v2.3/system-log.html" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
-				</ul>
-			</dd>
-		</dl>
+	<c:if test="${user!=null && user.perms!=null && fn:length(user.perms) > 0}">
+		<c:forEach items="${user.perms}" var="p">
+			<c:if test="${p!=null && p.pId == 0}">
+			<dl id="menu-repush">
+				<dt><i class="Hui-iconfont">${p.icon}</i> ${p.permName}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+					<c:forEach items="${user.perms}" var="p1">
+						<c:if test="${p1!=null && p1.pId == p.id}">
+							<li><a _href="${p1.permUrl}" data-title="${p1.permName}" href="javascript:void(0)">${p1.permName}</a></li>
+						</c:if>
+					</c:forEach>
+					</ul>
+				</dd>
+			</dl>
+			</c:if>
+		</c:forEach>
+	</c:if>
 		</div>		
 </aside>
 <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
@@ -120,7 +97,7 @@
 	<div id="Hui-tabNav" class="Hui-tabNav">
 		<div class="Hui-tabNav-wp">
 			<ul id="min_title_list" class="acrossTab cl">
-				<li class="active"><span title="系统运行概况" data-href="status.jsp">运行概况</span><em></em></li>
+				<li class="active"><span title="我的桌面" data-href="status.jsp">我的桌面</span><em></em></li>
 			</ul>
 		</div>
 		<div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d4;</i></a><a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d7;</i></a></div>
@@ -128,7 +105,7 @@
 	<div id="iframe_box" class="Hui-article">
 		<div class="show_iframe">
 			<div style="display:none" class="loading"></div>
-			<iframe scrolling="yes" frameborder="0" src="welcome.jsp"></iframe>
+			<iframe scrolling="yes" frameborder="0" src="welcome.do"></iframe>
 		</div>
 	</div>
 </section>

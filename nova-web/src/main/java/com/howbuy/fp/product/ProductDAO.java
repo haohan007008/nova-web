@@ -99,6 +99,7 @@ public class ProductDAO {
 			prd.setCatalog(hst.get("dictval").toString());
 			prd.setId(prdId);	
 			prd.setMatWgt(Constants.toDouble(hst.get("matWgt")));
+			prd.setPrdSmallImg(hst.get("prdSmallImg").toString());
 			prd.setPrdImg(hst.get("prdImg").toString());
 			prd.setPrdName(hst.get("prdName").toString());
 			prd.setPrdNo(hst.get("prdNo").toString());
@@ -106,6 +107,38 @@ public class ProductDAO {
 			prd.setPrice(Constants.toDouble(hst.get("price")));
 			prd.setRemark(Constants.isBlank(hst.get("remark"))?"":hst.get("remark").toString());
 			prd.setItems(getProductColorById(prdId));
+		}
+		return prd;
+	}
+	
+	/**
+	 * getProductById
+	 *
+	 * @param prdId
+	 * @return 创建时间：2017年3月7日 下午8:40:46
+	 */
+	public Product getProductByIdNoItems(int prdId){
+		Product prd = new Product();
+		List<Object> parameters = new ArrayList<>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getproductById");
+		log.debug("execute sql:" + sql );
+		parameters.add(prdId);
+		log.debug("parameters:" + JSON.toJSONString(parameters));
+		Hashtable<String, Object> hst = this.sqlHelper.query4OneObject(sql, parameters);
+		if(hst != null ){
+			prd.setBatchPrice(Constants.toDouble(hst.get("batchPrice")));
+			prd.setCatalog(hst.get("dictval").toString());
+			prd.setId(prdId);	
+			prd.setMatWgt(Constants.toDouble(hst.get("matWgt")));
+			prd.setPrdSmallImg(hst.get("prdSmallImg").toString());
+			prd.setPrdImg(hst.get("prdImg").toString());
+			prd.setPrdName(hst.get("prdName").toString());
+			prd.setPrdNo(hst.get("prdNo").toString());
+			prd.setPrdType(hst.get("prdType").toString());
+			prd.setPrice(Constants.toDouble(hst.get("price")));
+			prd.setRemark(Constants.isBlank(hst.get("remark"))?"":hst.get("remark").toString());
+			//prd.setItems(getProductColorById(prdId));
 		}
 		return prd;
 	}

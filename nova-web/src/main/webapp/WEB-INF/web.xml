@@ -28,7 +28,6 @@
 		<filter-name>appfilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
-	
 	 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

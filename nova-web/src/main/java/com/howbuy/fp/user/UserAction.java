@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.howbuy.fp.utils.Constants;
 import com.howbuy.fp.utils.RespResult;
 
 /** 
@@ -36,7 +37,7 @@ public class UserAction {
 	public  String index(HttpServletRequest request, HttpServletResponse response,HttpSession session){
 		RespResult<UserVO> userResp = (RespResult<UserVO>)session.getAttribute("USER_KEY");
 		if (userResp != null) {
-			
+			request.setAttribute("user", userResp.getObj());
 			return "/index";
 			
 		}else return "/login";
@@ -45,6 +46,20 @@ public class UserAction {
 	
 	@RequestMapping("/login")
 	public  String login(HttpServletRequest request){
+        return "/login";
+	}
+	
+	@RequestMapping("/welcome")
+	public  String welcome(HttpServletRequest request){
+		RespResult<UserVO> resp = (RespResult<UserVO>)request.getSession().getAttribute("USER_KEY");
+		
+		request.setAttribute("user", resp.getObj());
+        return "/welcome";
+	}
+	
+	@RequestMapping("/logout")
+	public  String logout(HttpServletRequest request){
+		request.getSession().removeAttribute("USER_KEY");
         return "/login";
 	}
 	
@@ -74,6 +89,7 @@ public class UserAction {
 		if(session.getAttribute("strCode").toString().equals(authCode)){
 			resp = userService.login(username, userpwd);
 			if(resp != null && resp.getObj() !=null){
+				userService.log(resp.getObj().getUserId(), "login", Constants.getIP(request));
 				session.setAttribute("USER_KEY",resp);
 			}
 		}else {

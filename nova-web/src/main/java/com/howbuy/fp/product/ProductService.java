@@ -63,17 +63,22 @@ public class ProductService {
 	public List<Product> delCart(List<Product> list,int prdId,int cid){
 		if(list!=null && list.size() > 0){
 			for (int i = 0; i < list.size(); i++) {
+				
 				Product prd = (Product)list.get(i);
 				int s = 0;
+				
 				if(prd.getId() == prdId && 
 						prd.getItems() != null && prd.getItems().size() > 0){
-					for (int j = 0; j < s; j++) {
-						if(((ProductColorItem)prd.getItems().get(j)).getId() == cid){
-							s = prd.getItems().size();
-							prd.getItems().remove(j);
+					
+						List<ProductColorItem> items = prd.getItems();
+						for (int j = 0; j < items.size(); j++) {
+							ProductColorItem item = items.get(j);
+							if(item.getId() == cid){
+								s = prd.getItems().size();
+								list.get(i).getItems().remove(j);
+								if(s == 1) list.remove(i);
+							}
 						}
-					}
-					if(s == 1) list.remove(i);
 				}
 			}
 		}

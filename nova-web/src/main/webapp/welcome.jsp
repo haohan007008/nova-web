@@ -34,8 +34,8 @@
 			<button name="refresh" id="refresh" class="btn btn-success" type="button">
 			<i class="Hui-iconfont">&#xe68f;</i> </button>
 			</span></p>
-  <p>登录次数：18 </p>
-  <p>上次登录IP：222.35.131.79.1  上次登录时间：2014-6-14 11:19:55</p>
+  <p>登录次数：${user.loginCount} </p>
+  <p>上次登录IP：${user.lastLoginIP}   上次登录时间：${user.lastLoginDate}</p>
 		 </div>
 <div class="pd-20" style="padding-top:0px;height:340px">
 

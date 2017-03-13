@@ -207,7 +207,7 @@ public class SqlHelper {
             while (rs.next()) {
             	Hashtable<String, Object> htData = new Hashtable<String, Object>(columnCount);
             	for (int i = 1; i <= columnCount; i++) {
-            		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? "Null":rs.getObject(i));   
+            		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? "":rs.getObject(i));   
             	} 
             	list.add(htData);
             }
@@ -318,7 +318,7 @@ public class SqlHelper {
             if (rs.next()) {
             	htData = new Hashtable<String, Object>(columnCount);
             	for (int i = 1; i <= columnCount; i++) {
-            		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? new String("Null"):rs.getObject(i));   
+            		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? new String(""):rs.getObject(i));   
             	} 
             }
         } catch (SQLException e) {

@@ -63,8 +63,8 @@
 					<span class="r"> 
 						<a class="btn btn-primary radius" onclick="addCart()" 
 							href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加到购物车</a>&nbsp;
-						<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
-							<i class="Hui-iconfont">&#xe672;</i> 结算</a> 
+						<a href="javascript:;" onclick="gotomycart()" class="btn btn-danger radius">
+							<i class="Hui-iconfont">&#xe672;</i> 查看购物车</a> 
 					</span> 
 				</div>
 			</div>
@@ -187,7 +187,6 @@ function refresh_table(){
 	var trs = $("#prdItems > tbody").find('tr');
 	var price = $("#price").html()*1;
 	var bprice = $("#bprice").html()*1;
-	console.log('price : bprice = '+price + ":" + bprice);
 	var cnt_s=0,cnt_m=0,cnt_l=0,cnt_xl=0,cnt_xxl=0;
 	for(var i=0;i<trs.length;i++){
 		var tds = trs[i].children;
@@ -218,7 +217,7 @@ function refresh_table(){
 	}
 	
 	var total = cnt_s+ cnt_m +cnt_l+cnt_xl+cnt_xxl;
-	console.log("total:"+total);
+	//console.log("total:"+total);
 	$("#cnt_s").html(cnt_s);
 	$("#cnt_m").html(cnt_m);
 	$("#cnt_l").html(cnt_l);
@@ -234,25 +233,34 @@ function refresh_table(){
 
 function addCart(){
 	//alert(JSON.stringify(getDataset()));
-	$.ajax({ 
-        type:"POST", 
-        url:"product/addcart.do?dt="+new Date(), 
-        dataType:"json",      
-        contentType:"application/json",               
-        data:JSON.stringify(getDataset()), 
-        success:function(data){ 
-        	if(data.success){
-        		var t=window.parent; 
-        		if(t)
-        		t.postMessage({type:'mycart',total:data.total}, '*');
-        		layer.msg('添加到购物车成功',{icon:1,time:1000}); 
-        	}else 
-        		layer.msg('添加到购物车失败！'+data.desc,{icon:2,time:2000}); 
-        } 
-     }); 
+	var rd = getDataset();
+	//alert(JSON.stringify(rd));
+	//alert('rd.items.length'+rd.items.length);
+	if(rd.items && rd.items.length > 0){
+		$.ajax({ 
+	        type:"POST", 
+	        url:"product/addcart.do?dt="+new Date(), 
+	        dataType:"json",      
+	        contentType:"application/json",               
+	        data:JSON.stringify(rd), 
+	        success:function(data){ 
+	        	if(data.success){
+	        		var t=window.parent; 
+	        		if(t)
+	        		t.postMessage({type:'mycart',total:data.total}, '*');
+	        		layer.msg('添加到购物车成功',{icon:1,time:1000}); 
+	        	}else 
+	        		layer.msg('添加到购物车失败！'+data.desc,{icon:2,time:2000}); 
+	        } 
+	     }); 
+	}else layer.msg('请至少选择一件商品！',{icon:2,time:2000}); 
 	
 }
-
+function gotomycart(){
+	//var t=window.parent; 
+	if(window.parent) //'mycart','购物车','productcart.do'
+		window.parent.postMessage({id:'mycart',title:'购物车',url:'productcart.do'}, '*');
+}
 function getDataset(){
 	var trs = $("#prdItems > tbody").find('tr');
 	var prdId = $("#prdId").val();
@@ -264,25 +272,31 @@ function getDataset(){
 		rd.colorName = tds[0].innerText;
 		rd.colorNo = tds[1].innerText;
 		rd.id = tds[0].children[0].value;
-		
+		var cnt = 0;
 		if(tds[2].children[0].value || tds[2].children[0].value !=''){
 			rd.ns = tds[2].children[0].value*1;
+			cnt += rd.ns;
 		}
 		if(tds[3].children[0].value || tds[3].children[0].value !=''){
 			rd.nm = tds[3].children[0].value*1;
+			cnt += rd.nm;
 		}
 		if(tds[4].children[0].value || tds[4].children[0].value !=''){
 			rd.nl = tds[4].children[0].value*1;
+			cnt += rd.nl;
 		}
 		if(tds[5].children[0].value || tds[5].children[0].value !=''){
 			rd.nxl = tds[5].children[0].value*1;
+			cnt += rd.nxl;
 		}
 		if(tds[6].children[0].value || tds[6].children[0].value !=''){
 			rd.nxxl = tds[6].children[0].value*1;
+			cnt += rd.nxxl;
 		}
-		data[i] = rd;
+		
+		if(cnt > 0 )
+			data[data.length] = rd;
 	}
-	alert(JSON.stringify(data)); 
 	return {id:prdId,items:data};
 }
 </script>
