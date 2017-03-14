@@ -5,6 +5,58 @@
 		<variable name="data_page_size">50</variable>
 	</variables>	
 	<scripts>
+		<script name="getorderlog">
+			<![CDATA[
+				select l.*,n.nodeName,f.name userName from r_order_log l,f_flownode n ,p_staff f
+				where l.orderId = ? and l.action = n.id
+				and f.id = l.userId
+				order by timestamp asc
+
+			 ]]>
+		</script>
+		<script name="addorderlog">
+			<![CDATA[
+				insert into r_order_log(orderId,userId,action,remark)values(?,?,?,?)
+			 ]]>
+		</script>
+		<script name="getorderNo">
+			<![CDATA[
+				select  CONCAT(DATE_FORMAT(r.`timestamp`,'%Y%m%d'),lpad(count(1)+1,4,'0')) orderno
+					 from r_order r where DATE_FORMAT(r.`timestamp`,'%Y%m%d') = date_format(now(),'%Y%m%d')
+			 ]]>
+		</script>
+		<script name="canelOrder">
+			<![CDATA[
+				update r_order set curNode =7 ,oprState = 8 where id = ?
+			 ]]>
+		</script>
+		<script name="canelOrderItem">
+			<![CDATA[
+				update r_orderitem set oprState =8 where orderId = ?
+			 ]]>
+		</script>
+		<script name="bakOrder">
+			<![CDATA[
+				insert into r_order_his select * from r_order where id = ?
+			 ]]>
+		</script>
+		<script name="disableorderitem">
+			<![CDATA[
+			update r_orderitem o set o.oprState = 9 where o.orderId = ?
+			]]>
+		</script>
+		<script name="aduitOrder">
+			<![CDATA[
+			update r_order  set shipAddress = ? ,
+										remark = ? ,
+										totalPay = ?,
+										prePay=?,
+										totalPrd=?,
+										curNode=?,
+										curOperator=?
+			where id = ?
+			]]>
+		</script>
 		<script name="getOrderByID">
 			<![CDATA[
 				select o.*,fn.nodeName,f.name as creator ,f1.name as curOper
@@ -15,7 +67,7 @@
 		</script>
 		<script name="getOrderItemsByOrderId">
 			<![CDATA[
-				select * from r_orderitem where orderId = ? order by prdId,prdColorId
+				select * from r_orderitem where orderId = ? and oprState=0 order by prdId,prdColorId
 			 ]]>
 		</script>
 		<script name="getOrders">
@@ -37,9 +89,11 @@
 		</script>
 		<script name="myOperOrdersCount">
 			<![CDATA[
-				select count(1)
-					from r_order o
-				where o.curOperator = ?
+				SELECT count(1) from (select o.id,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,
+					o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp,o.oprState
+					from r_order o,f_flownode fn,p_staff f,p_staff f1
+				where  o.curNode = fn.id
+				and f.Id = o.staffId and f1.Id = o.curOperator ) a where 1=1 and curOperator = ?
 			 ]]>
 		</script>
 		

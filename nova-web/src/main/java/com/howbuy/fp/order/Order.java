@@ -1,5 +1,6 @@
 package com.howbuy.fp.order;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import com.howbuy.fp.product.Product;
@@ -11,6 +12,13 @@ import com.howbuy.fp.product.ProductColorItem;
  */
 public class Order {
 	private int id;
+	private String orderNo;
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 	private int custId ;
 	private String custName;
 	private String custAddr;
@@ -36,6 +44,13 @@ public class Order {
 	private String curOperatorName;
 	private List<ProductColorItem> items;
 	private List<Product> prds;
+	private List<Hashtable<String, Object>> logs;
+	public List<Hashtable<String, Object>> getLogs() {
+		return logs;
+	}
+	public void setLogs(List<Hashtable<String, Object>> logs) {
+		this.logs = logs;
+	}
 	public List<Product> getPrds() {
 		return prds;
 	}

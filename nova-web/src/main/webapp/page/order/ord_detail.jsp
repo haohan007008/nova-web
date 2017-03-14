@@ -38,7 +38,12 @@
 		<% 
 			Order order =  (Order)request.getAttribute("order");
 		%>
-		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r"> <a class="btn btn-primary radius" onclick="order(1)"  href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 保存订单</a>&nbsp;<a href="javascript:;" onclick="order(2)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe672;</i> 提交下单</a> </span> 
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+		<span class="r">
+		<a class="btn btn-primary radius" onclick="order(1)"  href="javascript:;">
+		<i class="Hui-iconfont">&#xe600;</i> 保存订单</a>&nbsp;
+		<a href="javascript:;" onclick="order(3)" class="btn btn-danger radius">
+		<i class="Hui-iconfont">&#xe672;</i> 审核通过</a> </span> 
 		<span class="l">订货总数：
 		<strong id="l_total_cnt">${order.totalPrd}</strong> 件，合计金额：
 		<strong id="l_total_m" class="c-red"><input type="text" class="input-text text-c" style="width:90px" id="i_total_m" value="${order.totalPay}"></strong>元</span>，应付定金：
@@ -46,10 +51,12 @@
 		
 		<div class="row cl mt-20">
 					<label class="form-label col-1 text-r"><span class="c-red">*</span>客户名称：</label>
-					<div class="formControls col-4">
+					<div class="formControls col-3">
 						<input type="hidden" id="orderId" value="<%=order.getId() %>">
 						${order.custName}
 					</div>
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>订单提交人：${order.creatorName}</label>
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>当前处理人：${order.curOperatorName}</label>
 				</div>
 				<div class="row cl  mt-20">
 					<label class="form-label col-1 text-r"><span class="c-red">*</span>地址：</label>
@@ -246,13 +253,15 @@ $(function () {
 });
 
 function order(nextAction){
+	//alert($("#l_total_cnt").html());
 	var order = {
 			id: $('#orderId').val(),
 			shipAddress: $('#cust_addr').val(),
 			remark: $('#cust_remark').val(),
 			totalPay:$('#i_total_m').val(),
 			prePay:$('#i_total_d').val(),
-			curNodeId:nextAction,
+			curNode:nextAction,
+			totalPrd:$("#l_total_cnt").html(),
 			items : getDataSet()
 			
 	};
@@ -292,6 +301,8 @@ function getDataSet(){
 		var rd = {};
 		rd.prdId = tds[0+l].children[0].value;
 		rd.id = tds[1+l].children[0].value;
+		rd.colorName = tds[0+l].innerText;
+		rd.colorNo = tds[1+l].innerText;
 		var cnt = 0;
 		if(tds[2+l].children[0].value || tds[2+l].children[0].value !=''){
 			rd.ns= tds[2+l].children[0].value*1;

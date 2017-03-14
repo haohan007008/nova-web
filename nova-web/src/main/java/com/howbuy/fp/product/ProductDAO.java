@@ -96,7 +96,7 @@ public class ProductDAO {
 		Hashtable<String, Object> hst = this.sqlHelper.query4OneObject(sql, parameters);
 		if(hst != null ){
 			prd.setBatchPrice(Constants.toDouble(hst.get("batchPrice")));
-			prd.setCatalog(hst.get("dictval").toString());
+			prd.setCatalog(hst.get("catalog_name").toString());
 			prd.setId(prdId);	
 			prd.setMatWgt(Constants.toDouble(hst.get("matWgt")));
 			prd.setPrdSmallImg(hst.get("prdSmallImg").toString());
@@ -128,7 +128,7 @@ public class ProductDAO {
 		Hashtable<String, Object> hst = this.sqlHelper.query4OneObject(sql, parameters);
 		if(hst != null ){
 			prd.setBatchPrice(Constants.toDouble(hst.get("batchPrice")));
-			prd.setCatalog(hst.get("dictval").toString());
+			prd.setCatalog(hst.get("catalog_name").toString()); 
 			prd.setId(prdId);	
 			prd.setMatWgt(Constants.toDouble(hst.get("matWgt")));
 			prd.setPrdSmallImg(hst.get("prdSmallImg").toString());

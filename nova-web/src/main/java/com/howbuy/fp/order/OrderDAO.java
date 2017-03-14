@@ -38,6 +38,36 @@ public class OrderDAO {
 		this.sqlHelper = sqlHelper;
 	}
 	
+	/**
+	 * cancelOrder 取消订单
+	 *
+	 * @param orderId
+	 * @return 创建时间：2017年3月14日 上午11:04:33
+	 */
+	public RespResult<String> cancelOrder(int orderId){
+		RespResult<String> resp = new RespResult<String>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		try {
+			this.sqlHelper.executeUpdate(context.getScript("canelOrder"), 
+					new ArrayList<Object>(Arrays.asList(orderId)));
+			this.sqlHelper.executeUpdate(context.getScript("canelOrderItem"), 
+					new ArrayList<Object>(Arrays.asList(orderId)));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.setSuccess(false);
+			resp.setDesc("cancel Order error , ="
+					+ " please contact system administrator !" + e.getMessage());
+		}
+		return resp;
+	}
+	
+	/**
+	 * insertOrder
+	 *
+	 * @param order
+	 * @return 创建时间：2017年3月14日 上午8:55:15
+	 */
 	public RespResult<String> insertOrder(Order order){
 		RespResult<String> resp = new RespResult<String>();
 		List<Object> parameters = new ArrayList<>();
@@ -48,7 +78,7 @@ public class OrderDAO {
 		
 		lastId = this.newOrderId();
 		parameters.add(lastId);
-		parameters.add(order.getCustName());
+		parameters.add(this.getOrderNo());
 		parameters.add(1);
 		parameters.add(2);
 		parameters.add(order.getCustName());
@@ -92,6 +122,7 @@ public class OrderDAO {
 				this.sqlHelper.executeBatch(context.getScript("addorderitem"), params, "");
 				this.sqlHelper.executeUpdate(context.getScript("updateorderitems"), new ArrayList<Object>(Arrays.asList(lastId)));
 				this.sqlHelper.executeUpdate(context.getScript("updateorder"), new ArrayList<Object>(Arrays.asList(lastId)));
+				this.addorderlog(lastId, order.getStaffId(), "1", order.getRemark());
 			} catch (Exception e) {
 				e.printStackTrace();
 				this.sqlHelper.executeUpdate(context.getScript("deleteorderitem"), new ArrayList<Object>(Arrays.asList(lastId)));
@@ -107,6 +138,80 @@ public class OrderDAO {
 		return resp;
 	}
 	
+	
+	public RespResult<String> updateOrder(Order order){
+		RespResult<String> resp = new RespResult<String>();
+		List<Object> parameters = new ArrayList<>();
+		//int lastId = -1;
+		ConfContext context = this.sqlHelper.getSqlContext();
+		this.sqlHelper.executeUpdate(context.getScript("bakOrder"), 
+				new ArrayList<Object>(Arrays.asList(order.getId())));
+		this.sqlHelper.executeUpdate(context.getScript("disableorderitem"), 
+				new ArrayList<Object>(Arrays.asList(order.getId())));
+		
+		String sql = context.getScript("aduitOrder");
+		//id, shipAddress, remark,totalPay,prePay,curNode
+		//lastId = this.newOrderId();
+		
+		//parameters.add(order.getCustName());
+		parameters.add(order.getShipAddress()); 
+		parameters.add(order.getRemark());
+		//parameters.add(order.getCustName());
+		//parameters.add(order.getStaffId());
+		parameters.add(order.getTotalPay()); //totalPay
+		parameters.add(order.getPrePay()); //prePay
+		parameters.add(order.getTotalPrd()); //totalPrd
+		parameters.add(3); //curNode
+		parameters.add(this.getNextOperator(1, 3)); //curOperator
+		parameters.add(order.getId());
+		log.info("updateOrder sql:" + sql);
+		log.info("updateOrder parameters:" + JSON.toJSONString(parameters));
+		
+		int effect = this.sqlHelper.executeUpdate(sql, parameters);
+		//log.info("effect:" + effect);
+		
+		if(effect >= 0 && order.getItems() != null 
+				&& order.getItems().size() > 0){
+			try {
+				//lastId = Integer.parseInt(this.sqlHelper.query4OneVal(context.getScript("lastId"), null));
+				//log.info("lastId:" + lastId);
+				List<List<Object>> params = new ArrayList<>();
+				for (int i = 0; i < order.getItems().size(); i++) {
+					List<Object> p = new ArrayList<>();
+					ProductColorItem item = order.getItems().get(i);
+					//orderId,prdId,prdColorId,prdColorNo,prdColorName,nxxl,nxl,nl,nm,ns,prdNum,price,subTotal)
+					p.add(order.getId());
+					p.add(item.getPrdId());
+					p.add(item.getId());
+					p.add(item.getColorNo());
+					p.add(item.getColorName());
+					p.add(item.getNxxl());
+					p.add(item.getNxl());
+					p.add(item.getNl());
+					p.add(item.getNm());
+					p.add(item.getNs());
+					p.add(item.getNxxl()+ item.getNxl()+ item.getNl()+ item.getNm()+ item.getNs());
+					p.add(item.getPrice());
+					p.add(item.getSubTotal());
+					params.add(p);
+				}
+				
+				this.sqlHelper.executeBatch(context.getScript("addorderitem"), params, "");
+				this.addorderlog(order.getId(), order.getStaffId(), "2", order.getRemark());
+			} catch (Exception e) {
+				e.printStackTrace();
+				//this.sqlHelper.executeUpdate(context.getScript("deleteorderitem"), new ArrayList<Object>(Arrays.asList(lastId)));
+				//this.sqlHelper.executeUpdate(context.getScript("deleteorder"), new ArrayList<Object>(Arrays.asList(lastId)));
+				resp.setSuccess(false);
+				resp.setDesc(e.getMessage());
+			}
+		}else {
+			resp.setSuccess(false);
+			resp.setDesc("update order error , [order.getItems] is null or effect < 0 ,"
+					+ " please contact system administrator !");
+		}
+		return resp;
+	}
 	
 	public synchronized int newOrderId(){
 		ConfContext context = this.sqlHelper.getSqlContext();
@@ -162,6 +267,32 @@ public class OrderDAO {
 	}
 	
 	/**
+	 * addorderlog
+	 *
+	 * @param orderId
+	 * @param userId
+	 * @param remark 创建时间：2017年3月14日 下午9:05:06
+	 */
+	public void addorderlog(int orderId,int userId,String action,String remark){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		List<Object> parameters = new ArrayList<>();
+		parameters.add(orderId);
+		parameters.add(userId);
+		parameters.add(action);
+		parameters.add(remark);
+		this.sqlHelper.executeUpdate(context.getScript("addorderlog"), parameters);
+	}
+	
+	public List<Hashtable<String, Object>> getOrderLogs(int orderId){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getorderlog");
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, new ArrayList<Object>(Arrays.asList(orderId)));
+		
+		return hst;
+	}
+	
+	
+	/**
 	 * queryOrderList
 	 *
 	 * @param map
@@ -174,14 +305,42 @@ public class OrderDAO {
 		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, null);
 		return hst;
 	}
+	/**
+	 * queryOrderList
+	 *
+	 * @param map
+	 * @return 创建时间：2017年3月13日 下午2:24:05
+	 */
+	public List<Hashtable<String, Object>> queryOrderListHanlded(HashMap<String, Object> map,int userid){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getOrders") 
+				+ " and EXISTS (select 1 from r_order_his s "
+				+ "where s.id = a.id and s.curOperator = "+userid+")"
+				+ getDySql(map) ;
+		log.info("sql:"+sql);
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, null);
+		return hst;
+	}
 	
+	public int queryOrderListHanldedCount(HashMap<String, Object> map,int userid){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getOrdersCount") + " and EXISTS (select 1 from r_order_his s "
+				+ "where s.id = a.id and s.curOperator = "+userid+")"+ getDySql(map);
+		String str = this.sqlHelper.query4OneVal( sql, null);
+		try {
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
 	/**
 	 * queryOrderCount
 	 *
 	 * @param map
 	 * @return 创建时间：2017年3月13日 下午2:23:16
 	 */
-	public int queryOrderCount(HashMap<String, Object> map){
+	public int queryOrderCount(HashMap<String, Object> map ){
 		ConfContext context = this.sqlHelper.getSqlContext();
 		String sql = context.getScript("getOrdersCount") + getDySql(map);
 		String str = this.sqlHelper.query4OneVal( sql, null);
@@ -191,6 +350,18 @@ public class OrderDAO {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	/**
+	 * queryOrderCount
+	 *
+	 * @param map
+	 * @return 创建时间：2017年3月13日 下午2:23:16
+	 */
+	public synchronized String getOrderNo(){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("getorderNo");
+		return this.sqlHelper.query4OneVal( sql, null);
 	}
 	
 	/**
@@ -233,13 +404,15 @@ public class OrderDAO {
 		parameters.add(orderId);
 		log.info("sql:"+sql);
 		Hashtable<String, Object> hst = this.sqlHelper.query4OneObject(sql, parameters);
-		
+		System.out.println(JSON.toJSONString(hst));
 		if(hst != null && hst.size() > 0){
 			order.setCreateDate(nvl(hst.get("timestamp")));
 			order.setCreatorId(Integer.parseInt(nvl(hst.get("staffId"))));
 			order.setCreatorName(nvl(hst.get("creator")));
 			//order.setCurNode(Integer.parseInt(nvl(hst.get("curNode"))));
+			order.setCurNodeName(nvl(hst.get("nodeName")));
 			order.setCurNodeId(Integer.parseInt(nvl(hst.get("curNode"))));
+			order.setOrderNo(nvl(hst.get("name")));
 			order.setCurOperatorId(Integer.parseInt(nvl(hst.get("curOperator"))));
 			order.setCurOperatorName(nvl(hst.get("curOper")));
 			order.setCustAddr(nvl(hst.get("shipAddress")));
@@ -258,12 +431,20 @@ public class OrderDAO {
 			order.setTotalPrd(Integer.parseInt(nvl(hst.get("totalPrd"))));
 			//order.setItems(getOrderItemsByOrderId(orderId));
 			order.setPrds(parseList(getOrderItemsByOrderId(orderId)));
+			order.setLogs(getOrderLogs(orderId));
+			
 		}
 		
 		return order;
 	}
 	
 	
+	/**
+	 * getOrderItemsByOrderId
+	 *
+	 * @param orderId
+	 * @return 创建时间：2017年3月14日 上午11:01:21
+	 */
 	public List<ProductColorItem> getOrderItemsByOrderId(int orderId){
 		ConfContext context = this.sqlHelper.getSqlContext();
 		List<ProductColorItem> items = new ArrayList<ProductColorItem>();
@@ -276,7 +457,7 @@ public class OrderDAO {
 			for (Iterator iterator = hst.iterator(); iterator.hasNext();) {
 				Hashtable<String, Object> ht = (Hashtable<String, Object>) iterator.next();
 				ProductColorItem pItem = new ProductColorItem();
-				pItem.setId(Constants.toDouble(ht.get("Id")).intValue());
+				pItem.setId(Constants.toDouble(ht.get("prdColorId")).intValue());
 				pItem.setColorName(nvl(ht.get("prdColorName")));
 				pItem.setColorNo(nvl(ht.get("prdColorNo")));
 				pItem.setPrdId(Constants.toDouble(ht.get("prdId")).intValue());
@@ -294,7 +475,7 @@ public class OrderDAO {
 		return items;
 	}
 	public List<Product> parseList(List<ProductColorItem> items){
-		HashMap<Integer, Product> list = new HashMap<>();
+		Map<Integer, Product> list = new HashMap<>();
 		if(items != null && items.size() > 0){
 			for (int i = 0; i < items.size(); i++) {
 				ProductColorItem item = items.get(i);
@@ -314,14 +495,18 @@ public class OrderDAO {
 				}
 			}
 		}
-		List<Product> prds = new ArrayList<>();
-		if(list != null && list.size() > 0){
-			Iterator it = list.keySet().iterator();
-	        while (it.hasNext()) {
-	            Integer key = (Integer)it.next();
-	            prds.add(list.get(key));
-	        }
-		}
+		
+		
+		List<Product> prds = new ArrayList<Product>(list.values());
+		
+//		List<Product> prds = new ArrayList<>();
+//		if(list != null && list.size() > 0){
+//			Iterator it = list.keySet().iterator();
+//	        while (it.hasNext()) {
+//	            Integer key = (Integer)it.next();
+//	            prds.add(list.get(key));
+//	        }
+//		}
 		return prds;
 	}
 	public String nvl(Object obj){
@@ -329,5 +514,27 @@ public class OrderDAO {
 			return obj.toString();
 		}else return "";
 		
+	}
+
+	/**
+	 * buzAduitOrder
+	 *
+	 * @param order
+	 * @return 创建时间：2017年3月14日 下午5:10:53
+	 */
+	public RespResult<String> buzAduitOrder(Order order) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * finAduitOrder
+	 *
+	 * @param order
+	 * @return 创建时间：2017年3月14日 下午5:11:10
+	 */
+	public RespResult<String> finAduitOrder(Order order) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

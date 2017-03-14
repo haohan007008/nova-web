@@ -318,6 +318,7 @@ public class SqlHelper {
             if (rs.next()) {
             	htData = new Hashtable<String, Object>(columnCount);
             	for (int i = 1; i <= columnCount; i++) {
+            		//System.out.println(metaData.getColumnName(i));
             		htData.put(metaData.getColumnName(i), rs.getObject(i)==null ? new String(""):rs.getObject(i));   
             	} 
             }

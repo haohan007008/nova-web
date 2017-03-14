@@ -45,6 +45,12 @@
 	</c:if>
 	<ul class="Hui-userbar">
 		<li>${user.userName}</li>
+		
+		<li id="Hui-shop"> <a href="#" onclick="addTab('mycart','购物车','productcart.do')" title="我的下单">
+			<span class="badge badge-danger" id="mycart"></span>
+			<i class="Hui-iconfont" style="font-size:18px">&#xe6b9;</i></a> </li>
+		<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger"  id="myorder">${user.myOrderCount} </span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
+		
 		<li class="dropDown dropDown_hover"><a href="#" class="dropDown_A"><i class="Hui-iconfont" style="font-size:18px">&#xe705;</i></a>
 			<ul class="dropDown-menu radius box-shadow">
 				<li><a href="#">个人信息</a></li>
@@ -52,10 +58,6 @@
 				<li><a href="logout.do">退出</a></li>
 			</ul>
 		</li>
-		<li id="Hui-shop"> <a href="#" onclick="addTab('mycart','购物车','productcart.do')" title="我的下单">
-			<span class="badge badge-danger" id="mycart"></span>
-			<i class="Hui-iconfont" style="font-size:18px">&#xe6b9;</i></a> </li>
-		<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger"  id="myorder">${user.myOrderCount} </span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
 		<li id="Hui-skin" class="dropDown right dropDown_hover"><a href="javascript:;" title="换肤"><i class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
 			<ul class="dropDown-menu radius box-shadow">
 				<li><a href="javascript:;" data-val="default" title="默认（黑色）">默认（黑色）</a></li>
@@ -148,6 +150,9 @@ function member_add(title,url,w,h){
 	layer_show(title,url,w,h);
 }
 
+if (window.parent !== window.self) {
+    window.parent.location.reload();
+}
 
 </script> 
 

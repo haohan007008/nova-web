@@ -38,8 +38,18 @@
 		</div>
 		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
 		<span class="l"> 
-			<span class="label label-warning">待我处理的 </span> 
-			<span class="label label-primary">我经手的  </span>  
+		<%
+		 String orderType = (String)request.getAttribute("orderType");
+		 if(orderType != null && !"".equals(orderType)){
+		 	int ot = Integer.parseInt(orderType);
+		%>
+				<div class="btn-group">
+				  <span class="btn <% if(ot ==1) {%>btn-primary<%}else{%>btn-default<%} %> radius" id="btn1" onclick="myorders(1)">待我处理的</span>
+				  <span class="btn <% if(ot ==3) {%>btn-primary<%}else{%>btn-default<%} %> radius" id="btn3" onclick="myorders(3)">我创建的</span>
+				  <span class="btn <% if(ot ==2) {%>btn-primary<%}else{%>btn-default<%} %> radius" id="btn2" onclick="myorders(2)">我经手的</span>
+				</div>
+				<input type="hidden" id="orderType" value="${orderType}">
+				<%} %>
 			</span> 
 			<span class="r">共有数据：<strong><c:out value="${ordtotal}" /></strong> 条.
 			共<strong><c:out value="${pageCount}" /></strong>页,当前第<strong><c:out value="${curpage}" /></strong>页 </span></div>
@@ -76,7 +86,7 @@
 				 </c:if>
 				 <c:if test="${ordlist==null || fn:length(ordlist) == 0}">
 				 	<tr class="text-c va-m">
-				 		<td class="text-c" colspan="8">没有查询到订单！</td>
+				 		<td class="text-c" colspan="9">没有查询到订单！</td>
 				 	</tr>
 				 </c:if>
 				</tbody>
@@ -137,13 +147,23 @@
 <script type="text/javascript" src="js/H-ui.js"></script> 
 <script type="text/javascript" src="js/H-ui.admin.js"></script> 
 <script type="text/javascript">
+function myorders(p){
+	$('#orderType').val(p);
+	$('#btn1').addClass("btn-default");
+	$('#btn2').addClass("btn-default");
+	$('#btn3').addClass("btn-default");
+	$('#btn'+p).removeClass("btn-default");
+	$('#btn'+p).addClass("btn-primary");
+	goPage(1);
+}
 
 function goPage(pageNo){
 	var custName = $('#custName').val();
+	var orderType = $('#orderType').val();
 	if(pageNo){
-		location.replace("orders.do?custName="+encodeURI(custName)+"&pg="+pageNo);
+		location.replace("orders.do?custName="+encodeURI(custName)+"&pg="+pageNo+"&m="+orderType);
 	}else {
-		location.replace("orders.do?custName="+encodeURI(custName)+"&pg="+$('#pageNo').val());
+		location.replace("orders.do?custName="+encodeURI(custName)+"&pg="+$('#pageNo').val()+"&m="+orderType);
 	}
 }
 

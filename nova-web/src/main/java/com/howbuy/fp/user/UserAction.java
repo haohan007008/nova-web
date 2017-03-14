@@ -69,7 +69,8 @@ public class UserAction {
 		RespResult<UserVO> resp = new RespResult<UserVO>();
 		String authCode = request.getParameter("authCode");
 		
-		if(!session.getAttribute("strCode").toString().equals(authCode)){
+		if(session.getAttribute("strCode")==null
+				|| !session.getAttribute("strCode").toString().equals(authCode)){
 			resp.setSuccess(false);
 			resp.setDesc("验证码错误！");
 		}

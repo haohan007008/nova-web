@@ -36,12 +36,12 @@
 			<input type="text" name="prdName" id="prdName" placeholder="款号" style="width:250px" class="input-text" value="<c:out value="${prdName}" />">
 			<button name="search" id="search" class="btn btn-success" type="button" onclick="goPage(1)"><i class="Hui-iconfont">&#xe665;</i> 搜产品</button>
 		</div>
-		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <!-- 
 		<span class="r"> 
 			<a class="btn btn-primary radius" onclick="selectProduct()" 
 				href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加到购物车</a>&nbsp;
 			<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
-			<i class="Hui-iconfont">&#xe672;</i> 购物车</a> </span> 
+			<i class="Hui-iconfont">&#xe672;</i> 购物车</a> </span>  -->
 			<span class="l">共有数据：<strong><c:out value="${prdtotal}" /></strong> 条</span>.
 			共<strong><c:out value="${pageCount}" /></strong>页,当前第<strong><c:out value="${curpage}" /></strong>页 </div>
 		<div class="mt-20">

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.howbuy.fp.user.UserVO;
+import com.howbuy.fp.utils.Constants;
 import com.howbuy.fp.utils.RespResult;
 
 /** 
@@ -49,8 +50,26 @@ public class OrderAction {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		int staffId = 0;
+		RespResult<List<Hashtable<String, Object>>> prdResp = new RespResult<List<Hashtable<String, Object>>>();
 		
-		RespResult<List<Hashtable<String, Object>>> prdResp = orderService.getOrders(custName,limit*(page-1),limit);
+		if(request.getParameter("m") != null && !"".equals(request.getParameter("m"))){
+			String orderClz = request.getParameter("m");
+			staffId = this.getCurrentUser(request).getUserId();
+			if(Constants.ORDER_MY_CREATED.equals(orderClz)){
+				//我创建的
+				prdResp = orderService.getOrders(custName,limit*(page-1),limit,staffId);
+			}else if(Constants.ORDER_MY_HANDED.equals(orderClz)){
+				//我经手的
+				prdResp = orderService.getMyHanldedOrders(custName,limit*(page-1),limit,staffId);
+			}else if(Constants.ORDER_MY_HANDING.equals(orderClz)){
+				//待我处理的
+				prdResp = orderService.getMyOrders(custName,limit*(page-1),limit,staffId);
+			}
+			request.setAttribute("orderType", orderClz);
+		}else 
+			prdResp = orderService.getOrders(custName,limit*(page-1),limit,staffId);
+		
 		request.setAttribute("custName", custName);
 		request.setAttribute("ordlist", prdResp.getObj()); 
 		request.setAttribute("ordtotal", prdResp.getTotal()); 
@@ -74,14 +93,47 @@ public class OrderAction {
         return respResult.toString();
 	}
 	
+	/*
+	 * 经理审核
+	 * */
 	@RequestMapping(value ="/order/auditorder",method = {RequestMethod.POST })
 	@ResponseBody
 	public  String auditorder(@RequestBody Order order,HttpServletRequest request){
 		
 		order.setStaffId(getCurrentUser(request).getUserId());
 		order.setFlowId(1);
-		RespResult<Order> respResult = new RespResult<Order>();
-		respResult.setObj(order);
+		RespResult<String> respResult = orderService.updateOrder(order);
+		
+		log.info(respResult.toString());
+        return respResult.toString();
+	}
+	
+	/*
+	 * 业务审核，提交财务审核
+	 * */
+	@RequestMapping(value ="/order/buzaudit",method = {RequestMethod.POST })
+	@ResponseBody
+	public  String buzaudit(@RequestBody Order order,HttpServletRequest request){
+		
+		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setFlowId(1);
+		RespResult<String> respResult = new RespResult<String>();
+		
+		log.info(respResult.toString());
+        return respResult.toString();
+	}
+	
+	/*
+	 * 财务审核后归档
+	 * */
+	@RequestMapping(value ="/order/finaudit",method = {RequestMethod.POST })
+	@ResponseBody
+	public  String finaudit(@RequestBody Order order,HttpServletRequest request){
+		
+		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setFlowId(1);
+		RespResult<String> respResult = new RespResult<String>();
+		
 		log.info(respResult.toString());
         return respResult.toString();
 	}
@@ -90,7 +142,11 @@ public class OrderAction {
 	@ResponseBody
 	public  String myordercount(HttpServletRequest request){
 		
-		int myId = this.getCurrentUser(request).getUserId();
+		UserVO userVO = this.getCurrentUser(request);
+		
+		int myId  = 0 ;
+		if(userVO  != null )
+			myId = userVO.getUserId();
 		
 		RespResult<String> respResult = orderService.getmyOrdersCount(myId);
 		
@@ -110,7 +166,17 @@ public class OrderAction {
 		
 		request.setAttribute("order", respResult.getObj());
 		
-        return "/page/order/ord_detail";
+		UserVO userVO = this.getCurrentUser(request);
+		
+		if(userVO == null){
+			request.setAttribute("errorcode", "SessionTimeOut");
+			request.setAttribute("message", "登录信息过期！");
+			return "/page/error";
+		}
+		if(respResult.getObj().getCurNodeId() ==2 && 
+				userVO.getUserId() == respResult.getObj().getCurOperatorId())
+			return "/page/order/ord_detail";
+		else return "/page/order/ord_view";
 	}
 	
 	private UserVO getCurrentUser(HttpServletRequest request){
