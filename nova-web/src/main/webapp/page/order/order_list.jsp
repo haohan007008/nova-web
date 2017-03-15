@@ -73,11 +73,11 @@
 					<c:forEach items="${ordlist}" var="t">  
 				<tr class="text-c va-m">
 							<td><input name="product" type="checkbox" value=""></td>
-							<td>${t.id} </td>
-							<td><a onClick="detail(${t.id},'${t.custName}')" href="javascript:;">${t.custName}</a></td>
+							<td>${t.orderNo} </td>
+							<td><a onClick="detail(${t.id},'${t.orderNo}')" href="javascript:;">${t.custName}</a></td>
 							<td class="text-c">${t.totalPrd}</td>
 							<td class="text-c">${t.totalPay}</td>
-							<td class="text-c">${t.nodeName}</td>
+							<td class="text-c"><span class="label label-danger radius">${t.nodeName}</span></td>
 							<td class="text-c">${t.creator}</td>
 							<td class="text-c">${t.timestamp}</td>
 							<td class="text-c">${t.curOper}</td>

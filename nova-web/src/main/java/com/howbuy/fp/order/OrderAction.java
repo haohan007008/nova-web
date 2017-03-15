@@ -117,7 +117,21 @@ public class OrderAction {
 		
 		order.setStaffId(getCurrentUser(request).getUserId());
 		order.setFlowId(1);
-		RespResult<String> respResult = new RespResult<String>();
+		order.setCurNodeId(4);
+		RespResult<String> respResult = orderService.buzAduit(order);
+		
+		log.info(respResult.toString());
+        return respResult.toString();
+	}
+	
+	@RequestMapping(value ="/order/cancelOrder",method = {RequestMethod.POST })
+	@ResponseBody
+	public  String cancelOrder(@RequestBody Order order,HttpServletRequest request){
+		
+		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setFlowId(1);
+		order.setCurNodeId(4);
+		RespResult<String> respResult = orderService.cancelOrder(order);
 		
 		log.info(respResult.toString());
         return respResult.toString();
@@ -132,7 +146,8 @@ public class OrderAction {
 		
 		order.setStaffId(getCurrentUser(request).getUserId());
 		order.setFlowId(1);
-		RespResult<String> respResult = new RespResult<String>();
+		order.setCurNodeId(5);
+		RespResult<String> respResult = orderService.finAduit(order);
 		
 		log.info(respResult.toString());
         return respResult.toString();
@@ -175,8 +190,11 @@ public class OrderAction {
 		}
 		if(respResult.getObj().getCurNodeId() ==2 && 
 				userVO.getUserId() == respResult.getObj().getCurOperatorId())
-			return "/page/order/ord_detail";
-		else return "/page/order/ord_view";
+			return "/page/order/ord_detail"; //主管审核需要修改订单数据挑战到detail
+		else if(respResult.getObj().getCurNodeId() !=2 && 
+				userVO.getUserId() == respResult.getObj().getCurOperatorId())
+			return "/page/order/ord_view";
+		else return "/page/order/ord_vw";
 	}
 	
 	private UserVO getCurrentUser(HttpServletRequest request){
@@ -184,4 +202,11 @@ public class OrderAction {
 		return userResp.getObj();
 	}
 	
+	
+	@RequestMapping(value ="/order/orderstat",method = {RequestMethod.GET })
+	//@ResponseBody
+	public  String orderstat(HttpServletRequest request){
+		request.setAttribute("orders", orderService.reportOrdersDay("").getObj());
+		return "/page/order/sale_order";
+	}
 }

@@ -70,9 +70,9 @@
 							<td><c:out value="${t.Id}" /></td>
 							<td><a onClick="detail(<c:out value="${t.Id}" />,'<c:out value="${t.prdName}" />')" href="javascript:;"><img width="60" height="60" class="product-thumb" src="/nova-web/<c:out value="${t.prdSmallImg}" />"></a></td>
 							<td class="text-c"><a style="text-decoration:none" onClick="detail(<c:out value="${t.Id}" />,'<c:out value="${t.prdName}" />')" href="javascript:;">
-								<b class="text-success"><span class="label label-success radius"><c:out value="${t.dictval}" /></span> <c:out value="${t.prdName}" /></b> </a></td>
+								<b class="text-success"><span class="label label-success radius"><c:out value="${t.catalog_name}" /></span> <c:out value="${t.prdName}" /></b> </a></td>
 							<td class="text-l"><c:out value="${t.remark}" /></td>
-							<td class="text-c"><c:out value="${t.dictval}" /></td>
+							<td class="text-c"><c:out value="${t.catalog_name}" /></td>
 							<td class="text-c"><c:out value="${t.prdType}" /></td>
 							<td><span class="price"><c:out value="${t.price}" /></span> </td>
 							<td><span class="price"><c:out value="${t.batchPrice}" /></span> </td>

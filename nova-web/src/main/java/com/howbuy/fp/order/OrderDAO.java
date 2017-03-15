@@ -41,18 +41,18 @@ public class OrderDAO {
 	/**
 	 * cancelOrder 取消订单
 	 *
-	 * @param orderId
+	 * @param order
 	 * @return 创建时间：2017年3月14日 上午11:04:33
 	 */
-	public RespResult<String> cancelOrder(int orderId){
+	public RespResult<String> cancelOrder(Order order){
 		RespResult<String> resp = new RespResult<String>();
 		ConfContext context = this.sqlHelper.getSqlContext();
 		try {
 			this.sqlHelper.executeUpdate(context.getScript("canelOrder"), 
-					new ArrayList<Object>(Arrays.asList(orderId)));
+					new ArrayList<Object>(Arrays.asList(order)));
 			this.sqlHelper.executeUpdate(context.getScript("canelOrderItem"), 
-					new ArrayList<Object>(Arrays.asList(orderId)));
-			
+					new ArrayList<Object>(Arrays.asList(order)));
+			this.addorderlog(order.getId(), order.getStaffId(), "7", order.getRemark());
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.setSuccess(false);
@@ -523,8 +523,25 @@ public class OrderDAO {
 	 * @return 创建时间：2017年3月14日 下午5:10:53
 	 */
 	public RespResult<String> buzAduitOrder(Order order) {
-		// TODO Auto-generated method stub
-		return null;
+		RespResult<String> resp = new RespResult<String>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		List<Object> parameters = new ArrayList<>();
+		try {
+			parameters.add(order.getCurNodeId());
+			parameters.add(this.getNextOperator(order.getFlowId(), order.getCurNodeId()));
+			//parameters.add(order.getRemark());
+			parameters.add(order.getId());
+			this.sqlHelper.executeUpdate(context.getScript("buzAduit"), parameters);
+			this.addorderlog(order.getId(), order.getStaffId(), String.valueOf(order.getCurNodeId()),
+					order.getRemark());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.setSuccess(false);
+			resp.setDesc("buzAduitOrder error , ="
+					+ " please contact system administrator !" + e.getMessage());
+		}
+		return resp;
 	}
 
 	/**
@@ -534,7 +551,34 @@ public class OrderDAO {
 	 * @return 创建时间：2017年3月14日 下午5:11:10
 	 */
 	public RespResult<String> finAduitOrder(Order order) {
-		// TODO Auto-generated method stub
-		return null;
+		RespResult<String> resp = new RespResult<String>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		List<Object> parameters = new ArrayList<>();
+		try {
+			parameters.add(order.getCurNodeId());
+			parameters.add(this.getNextOperator(order.getFlowId(), order.getCurNodeId()));
+			//parameters.add(order.getRemark());
+			parameters.add(order.getPrePayTime());
+			parameters.add(order.getPayAccount());
+			parameters.add(order.getId());
+			this.sqlHelper.executeUpdate(context.getScript("finAduit"), parameters);
+			this.addorderlog(order.getId(), order.getStaffId(), String.valueOf(order.getCurNodeId()),
+					order.getRemark());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.setSuccess(false);
+			resp.setDesc("finAduitOrder error , ="
+					+ " please contact system administrator !" + e.getMessage());
+		}
+		return resp;
+	}
+	
+	
+	public List<Hashtable<String, Object>> reportOrdersDay(String month ){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("report_orders_day");
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, null);
+		return hst;
 	}
 }

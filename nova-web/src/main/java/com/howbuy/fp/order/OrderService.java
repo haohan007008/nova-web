@@ -148,4 +148,22 @@ public class OrderService {
 		resp.setTotal(orderDAO.queryOrderListHanldedCount(map,staffId));
 		return resp;
 	}
+
+	/**
+	 * cancelOrder
+	 *
+	 * @param order
+	 * @return 创建时间：2017年3月15日 下午6:13:32
+	 */
+	public RespResult<String> cancelOrder(Order order) {
+		// TODO Auto-generated method stub
+		return orderDAO.cancelOrder(order);
+	}
+	
+	public RespResult<List<Hashtable<String, Object>>> reportOrdersDay(String month){
+		RespResult<List<Hashtable<String, Object>>> resp = new RespResult<>();
+		List<Hashtable<String, Object>> hst = orderDAO.reportOrdersDay(month);
+		resp.setObj(hst);
+		return resp;
+	}
 }

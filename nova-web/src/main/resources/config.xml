@@ -5,6 +5,71 @@
 		<variable name="data_page_size">50</variable>
 	</variables>	
 	<scripts>
+		<script name="report_orders_day">
+			<![CDATA[
+				select dt,
+					sum(CASE curNode WHEN 1 THEN cnt ELSE 0 END ) s1_cnt,
+				  sum(CASE curNode WHEN 2 THEN cnt ELSE 0 END ) s2_cnt,
+					sum(CASE curNode WHEN 3 THEN cnt ELSE 0 END ) s3_cnt,
+					sum(CASE curNode WHEN 4 THEN cnt ELSE 0 END ) s4_cnt,
+					sum(CASE curNode WHEN 5 THEN cnt ELSE 0 END ) s5_cnt,
+					sum(CASE curNode WHEN 6 THEN cnt ELSE 0 END ) s6_cnt,
+					sum(CASE curNode WHEN 7 THEN cnt ELSE 0 END ) s7_cnt,
+					sum(CASE curNode WHEN 1 THEN totalPrd ELSE 0 END ) t1_cnt,
+				  sum(CASE curNode WHEN 2 THEN totalPrd ELSE 0 END ) t2_cnt,
+					sum(CASE curNode WHEN 3 THEN totalPrd ELSE 0 END ) t3_cnt,
+					sum(CASE curNode WHEN 4 THEN totalPrd ELSE 0 END ) t4_cnt,
+					sum(CASE curNode WHEN 5 THEN totalPrd ELSE 0 END ) t5_cnt,
+					sum(CASE curNode WHEN 6 THEN totalPrd ELSE 0 END ) t6_cnt,
+					sum(CASE curNode WHEN 7 THEN totalPrd ELSE 0 END ) t7_cnt,
+					sum(CASE curNode WHEN 1 THEN totalPay ELSE 0 END ) p1_cnt,
+				  sum(CASE curNode WHEN 2 THEN totalPay ELSE 0 END ) p2_cnt,
+					sum(CASE curNode WHEN 3 THEN totalPay ELSE 0 END ) p3_cnt,
+					sum(CASE curNode WHEN 4 THEN totalPay ELSE 0 END ) p4_cnt,
+					sum(CASE curNode WHEN 5 THEN totalPay ELSE 0 END ) p5_cnt,
+					sum(CASE curNode WHEN 6 THEN totalPay ELSE 0 END ) p6_cnt,
+					sum(CASE curNode WHEN 7 THEN totalPay ELSE 0 END ) p7_cnt
+				 from  vm_order_statics 
+				 where 1=1 
+				group by dt
+				union ALL
+				select '合计',
+					sum(CASE curNode WHEN 1 THEN cnt ELSE 0 END ) s1_cnt,
+				  sum(CASE curNode WHEN 2 THEN cnt ELSE 0 END ) s2_cnt,
+					sum(CASE curNode WHEN 3 THEN cnt ELSE 0 END ) s3_cnt,
+					sum(CASE curNode WHEN 4 THEN cnt ELSE 0 END ) s4_cnt,
+					sum(CASE curNode WHEN 5 THEN cnt ELSE 0 END ) s5_cnt,
+					sum(CASE curNode WHEN 6 THEN cnt ELSE 0 END ) s6_cnt,
+					sum(CASE curNode WHEN 7 THEN cnt ELSE 0 END ) s7_cnt,
+					sum(CASE curNode WHEN 1 THEN totalPrd ELSE 0 END ) t1_cnt,
+				  sum(CASE curNode WHEN 2 THEN totalPrd ELSE 0 END ) t2_cnt,
+					sum(CASE curNode WHEN 3 THEN totalPrd ELSE 0 END ) t3_cnt,
+					sum(CASE curNode WHEN 4 THEN totalPrd ELSE 0 END ) t4_cnt,
+					sum(CASE curNode WHEN 5 THEN totalPrd ELSE 0 END ) t5_cnt,
+					sum(CASE curNode WHEN 6 THEN totalPrd ELSE 0 END ) t6_cnt,
+					sum(CASE curNode WHEN 7 THEN totalPrd ELSE 0 END ) t7_cnt,
+					sum(CASE curNode WHEN 1 THEN totalPay ELSE 0 END ) p1_cnt,
+				  sum(CASE curNode WHEN 2 THEN totalPay ELSE 0 END ) p2_cnt,
+					sum(CASE curNode WHEN 3 THEN totalPay ELSE 0 END ) p3_cnt,
+					sum(CASE curNode WHEN 4 THEN totalPay ELSE 0 END ) p4_cnt,
+					sum(CASE curNode WHEN 5 THEN totalPay ELSE 0 END ) p5_cnt,
+					sum(CASE curNode WHEN 6 THEN totalPay ELSE 0 END ) p6_cnt,
+					sum(CASE curNode WHEN 7 THEN totalPay ELSE 0 END ) p7_cnt
+				 from  vm_order_statics 
+
+
+			 ]]>
+		</script>
+		<script name="buzAduit">
+			<![CDATA[
+				update r_order o set o.curNode = ? ,o.curOperator = ? where id = ?
+			 ]]>
+		</script>
+		<script name="finAduit">
+			<![CDATA[
+				update r_order o set o.curNode = ? ,o.curOperator = ? ,o.prePayTime = ?,o.payAccount=? where id = ?
+			 ]]>
+		</script>
 		<script name="getorderlog">
 			<![CDATA[
 				select l.*,n.nodeName,f.name userName from r_order_log l,f_flownode n ,p_staff f
@@ -72,7 +137,7 @@
 		</script>
 		<script name="getOrders">
 			<![CDATA[
-				SELECT * from (select o.id,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,
+				SELECT * from (select o.id,o.name orderNo,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,
 					o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp,o.oprState
 					from r_order o,f_flownode fn,p_staff f,p_staff f1
 				where  o.curNode = fn.id
