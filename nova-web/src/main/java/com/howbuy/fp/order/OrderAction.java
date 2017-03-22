@@ -83,13 +83,18 @@ public class OrderAction {
 	@RequestMapping(value ="/order/addorder",method = {RequestMethod.POST })
 	@ResponseBody
 	public  String addorder(@RequestBody Order order,HttpServletRequest request){
-		
-		order.setStaffId(getCurrentUser(request).getUserId());
-		order.setFlowId(1);
-		RespResult<String> respResult = orderService.addOrder(order);
-		if(respResult.isSuccess())
-			request.getSession().removeAttribute("mycart");
-		
+		RespResult<String> respResult = new RespResult<String>();
+		UserVO userVO = getCurrentUser(request);
+		if(userVO!= null){
+			order.setStaffId(userVO.getUserId());
+			order.setFlowId(1);
+			respResult = orderService.addOrder(order);
+			if(respResult.isSuccess())
+				request.getSession().removeAttribute("mycart");
+		}else {
+			respResult.setSuccess(false);
+			respResult.setDesc("用户登录已经过期，请重新登录！");
+		}
         return respResult.toString();
 	}
 	

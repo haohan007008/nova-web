@@ -49,9 +49,9 @@ public class OrderDAO {
 		ConfContext context = this.sqlHelper.getSqlContext();
 		try {
 			this.sqlHelper.executeUpdate(context.getScript("canelOrder"), 
-					new ArrayList<Object>(Arrays.asList(order)));
-			this.sqlHelper.executeUpdate(context.getScript("canelOrderItem"), 
-					new ArrayList<Object>(Arrays.asList(order)));
+					new ArrayList<Object>(Arrays.asList(order.getId())));
+			//this.sqlHelper.executeUpdate(context.getScript("canelOrderItem"), 
+			//		new ArrayList<Object>(Arrays.asList(order.getId())));
 			this.addorderlog(order.getId(), order.getStaffId(), "7", order.getRemark());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class OrderDAO {
 		parameters.add(0); //prePay
 		parameters.add(0); //totalPrd
 		parameters.add(order.getShipAddress()); //totalPrd
-		parameters.add(this.getNextOperator(1, 2)); //curOperator
+		parameters.add(this.getNextOperator(1, 2,lastId)); //curOperator
 		log.debug("parameters:" + JSON.toJSONString(parameters));
 		
 		int effect = this.sqlHelper.executeUpdate(sql, parameters);
@@ -154,7 +154,7 @@ public class OrderDAO {
 		//lastId = this.newOrderId();
 		
 		//parameters.add(order.getCustName());
-		parameters.add(order.getShipAddress()); 
+		//parameters.add(order.getShipAddress()); 
 		parameters.add(order.getRemark());
 		//parameters.add(order.getCustName());
 		//parameters.add(order.getStaffId());
@@ -162,7 +162,7 @@ public class OrderDAO {
 		parameters.add(order.getPrePay()); //prePay
 		parameters.add(order.getTotalPrd()); //totalPrd
 		parameters.add(3); //curNode
-		parameters.add(this.getNextOperator(1, 3)); //curOperator
+		parameters.add(this.getNextOperator(1, 3,order.getId())); //curOperator
 		parameters.add(order.getId());
 		log.info("updateOrder sql:" + sql);
 		log.info("updateOrder parameters:" + JSON.toJSONString(parameters));
@@ -227,15 +227,31 @@ public class OrderDAO {
 		return lastId;
 	}
 	
-	public int getNextOperator(int folwId,int curNode){
+	public int getNextOperator(int folwId,int curNode,int orderId){
 		ConfContext context = this.sqlHelper.getSqlContext();
 		List<Object> parameters = new ArrayList<>();
 		//String sql = context.getScript("lastId");
 		int nextOperatorId = -1;
-		parameters.add(folwId);
-		parameters.add(curNode);
-		nextOperatorId = Integer.parseInt(this.sqlHelper.query4OneVal(context.getScript("getNextOperator"), parameters));
 		
+		if(curNode == 3) {
+			//如果是经理审批环节，下发到业务确认，之前是谁下的单子就返回给谁确认
+			parameters.add(orderId);
+			String createId = this.sqlHelper.query4OneVal(context.getScript("gerOrderCreatorBYId"),	parameters);
+			if(createId != null ){
+				nextOperatorId = Integer.parseInt(createId);
+			}else {
+				parameters.clear();
+				parameters.add(folwId);
+				parameters.add(curNode);
+				nextOperatorId = Integer.parseInt(this.sqlHelper.query4OneVal(context.getScript("getNextOperator"),
+						parameters));
+			}
+		}else {
+			parameters.add(folwId);
+			parameters.add(curNode);
+			nextOperatorId = Integer.parseInt(this.sqlHelper.query4OneVal(context.getScript("getNextOperator"),
+					parameters));
+		}
 		if(nextOperatorId <= 0){
 			new Exception("getNextOperator error!");
 			log.error("getNextOperator error!");
@@ -314,8 +330,8 @@ public class OrderDAO {
 	public List<Hashtable<String, Object>> queryOrderListHanlded(HashMap<String, Object> map,int userid){
 		ConfContext context = this.sqlHelper.getSqlContext();
 		String sql = context.getScript("getOrders") 
-				+ " and EXISTS (select 1 from r_order_his s "
-				+ "where s.id = a.id and s.curOperator = "+userid+")"
+				+ " and EXISTS (select 1 from r_order_log s "
+				+ "where s.orderId = a.id and s.userid = "+userid+")"
 				+ getDySql(map) ;
 		log.info("sql:"+sql);
 		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, null);
@@ -324,8 +340,8 @@ public class OrderDAO {
 	
 	public int queryOrderListHanldedCount(HashMap<String, Object> map,int userid){
 		ConfContext context = this.sqlHelper.getSqlContext();
-		String sql = context.getScript("getOrdersCount") + " and EXISTS (select 1 from r_order_his s "
-				+ "where s.id = a.id and s.curOperator = "+userid+")"+ getDySql(map);
+		String sql = context.getScript("getOrdersCount") + " and EXISTS (select 1 from r_order_log s "
+				+ "where s.orderId = a.id and s.userid = "+userid+")"+ getDySql(map);
 		String str = this.sqlHelper.query4OneVal( sql, null);
 		try {
 			return Integer.parseInt(str);
@@ -528,11 +544,11 @@ public class OrderDAO {
 		List<Object> parameters = new ArrayList<>();
 		try {
 			parameters.add(order.getCurNodeId());
-			parameters.add(this.getNextOperator(order.getFlowId(), order.getCurNodeId()));
+			parameters.add(this.getNextOperator(order.getFlowId(), order.getCurNodeId(),order.getId()));
 			//parameters.add(order.getRemark());
 			parameters.add(order.getId());
 			this.sqlHelper.executeUpdate(context.getScript("buzAduit"), parameters);
-			this.addorderlog(order.getId(), order.getStaffId(), String.valueOf(order.getCurNodeId()),
+			this.addorderlog(order.getId(), order.getStaffId(), "3",
 					order.getRemark());
 			
 		} catch (Exception e) {
@@ -556,14 +572,13 @@ public class OrderDAO {
 		List<Object> parameters = new ArrayList<>();
 		try {
 			parameters.add(order.getCurNodeId());
-			parameters.add(this.getNextOperator(order.getFlowId(), order.getCurNodeId()));
+			parameters.add(this.getNextOperator(order.getFlowId(), order.getCurNodeId(),order.getId()));
 			//parameters.add(order.getRemark());
 			parameters.add(order.getPrePayTime());
 			parameters.add(order.getPayAccount());
 			parameters.add(order.getId());
 			this.sqlHelper.executeUpdate(context.getScript("finAduit"), parameters);
-			this.addorderlog(order.getId(), order.getStaffId(), String.valueOf(order.getCurNodeId()),
-					order.getRemark());
+			this.addorderlog(order.getId(), order.getStaffId(), "4",order.getRemark());
 			
 		} catch (Exception e) {
 			e.printStackTrace();

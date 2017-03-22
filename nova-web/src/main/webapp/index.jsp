@@ -22,12 +22,12 @@
 <link href="lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
 <link href="skin/default/skin.css" rel="stylesheet" type="text/css" id="skin" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
-<title>HowBuy-Valuation.admin v1.0</title>
+<title>傲奇服饰.admin v1.0</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 </head>
 <body>
-<header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/">盘中估值  - admin</a> <a class="Hui-logo-m l" href="/" title="H-ui.admin">Monitor</a> <span class="Hui-subtitle l">V1.0</span>
+<header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/">傲奇服饰  - 订单管理</a> <a class="Hui-logo-m l" href="/" title="H-ui.admin">Monitor</a> <span class="Hui-subtitle l">V1.0</span>
 	<c:if test="${user!=null && user.perms!=null && fn:length(user.perms) > 0}">
 	<nav class="mainnav cl" id="Hui-nav">
 		<ul>
@@ -153,7 +153,14 @@ function member_add(title,url,w,h){
 if (window.parent !== window.self) {
     window.parent.location.reload();
 }
-
+function order_view(ordId,orderNo){
+	var index = layer.open({
+		type: 2,
+		title: '订单号：'+orderNo,
+		content: 'order/getorder.do?rid='+ ordId
+	});
+	layer.full(index);
+}
 </script> 
 
 </html>

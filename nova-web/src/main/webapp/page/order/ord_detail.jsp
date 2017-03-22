@@ -2,6 +2,8 @@
 <%@page import="com.howbuy.fp.order.Order"%>
 <%@page import="com.howbuy.fp.product.ProductColorItem"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Hashtable"%>
+<%@page import="java.util.Iterator"%>
 <%@ page language="java" pageEncoding="utf-8" isELIgnored="false"%>
 <%@ page contentType="text/html;charset=utf-8"%>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -37,11 +39,12 @@
 	<div class="pd-20">
 		<% 
 			Order order =  (Order)request.getAttribute("order");
+			int curNodeId  = order.getCurNodeId();
 		%>
 		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
 		<span class="r">
-		<a class="btn btn-primary radius" onclick="order(1)"  href="javascript:;">
-		<i class="Hui-iconfont">&#xe600;</i> 保存订单</a>&nbsp;
+		<a class="btn btn-primary radius" onclick="order(7)"  href="javascript:;">
+		<i class="Hui-iconfont">&#xe600;</i> 订单取消</a>&nbsp;
 		<a href="javascript:;" onclick="order(3)" class="btn btn-danger radius">
 		<i class="Hui-iconfont">&#xe672;</i> 审核通过</a> </span> 
 		<span class="l">订货总数：
@@ -50,20 +53,22 @@
 		<strong id="l_total_d" class="c-red"><input type="text" class="input-text text-c" style="width:90px" id="i_total_d" value="${order.prePay}"></strong>元</span> </div>
 		
 		<div class="row cl mt-20">
-					<label class="form-label col-1 text-r"><span class="c-red">*</span>客户名称：</label>
-					<div class="formControls col-3">
-						<input type="hidden" id="orderId" value="<%=order.getId() %>">
-						${order.custName}
-					</div>
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>订单提交人：${order.creatorName}</label>
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>当前处理人：${order.curOperatorName}</label>
+					<label class="form-label col-3 text-l"><span class="c-red">*</span>订单编号：${order.orderNo}</label>
+					<label class="form-label col-3 text-l"><span class="c-red">*</span>订单提交人：${order.creatorName}</label>
+					<label class="form-label col-3 text-l"><span class="c-red">*</span>提交时间：${order.createDate}</label>
+		</div>
+				<div class="row cl mt-20 ">
+					<label class="form-label col-3 text-l>
+					<input type="hidden" id="nodeId" value="<%=curNodeId %>">
+					<input type="hidden" id="orderId" value="<%=order.getId() %>">
+					<span class="c-red">*</span>客户名称：${order.custName}</label>
+					<label class="form-label col-3 text-l"><span class="c-red">*</span>当前处理人：${order.curOperatorName}</label>
+					<label class="form-label col-3 text-l"><span class="c-red">*</span>当前处理环节：<span class="label label-danger radius">${order.curNodeName}</span></label>
+		</div>
+		<div class="row cl  mt-20">
+					<label class="form-label col-8 text-l"><span class="c-red">*</span>地址：${order.shipAddress}</label>
 				</div>
-				<div class="row cl  mt-20">
-					<label class="form-label col-1 text-r"><span class="c-red">*</span>地址：</label>
-					<div class="formControls col-10">
-						<input type="text" id="cust_addr" placeholder="控制在25个字、50个字节以内" value="${order.shipAddress}" class="input-text radius">
-					</div>
-				</div>
+				
 
 		<div class="mt-20">
 			<table class="table table-border table-bordered table-bg table-hover table-sort" id="mycart">
@@ -89,7 +94,6 @@
 				</thead>
 				<tbody>
 					<%
-						
 						List<Product> products = (List<Product>)order.getPrds();
 						if(products == null || products.size() <= 0){
 					%>
@@ -166,9 +170,31 @@
 				</tbody>
 			</table>
 		</div>
+		<%
+			List<Hashtable<String, Object>> logs = order.getLogs();
+			if(logs != null || logs.size() > 0){
+				for (Iterator iterator = logs.iterator(); iterator.hasNext();) {
+					Hashtable<String, Object> ht = (Hashtable<String, Object>) iterator.next();
+		%>
 		<div class="row cl  mt-20">
-					<label class="form-label col-1 text-r"><span class="c-red">*</span>备注：</label>
-					<div class="formControls col-10">
+			<ul class="commentList">
+			  <li class="item cl comment-flip"> <a href="#"><i class="avatar size-L radius"><img alt="" src="http://static.h-ui.net/h-ui/images/ucnter/avatar-default.jpg"></i></a>
+			    <div class="comment-main">
+			      <header class="comment-header">
+			        <div class="comment-meta"><a class="comment-author" href=""><%=ht.get("userName").toString() %></a>【<%=ht.get("nodeName").toString() %>】于
+			          <time title="<%=ht.get("timestamp").toString() %>" datetime="<%=ht.get("timestamp").toString() %>"><%=ht.get("timestamp").toString() %></time>
+			        </div>
+			      </header>
+			      <div class="comment-body">
+			        <p> <%=ht.get("remark").toString() %></p>
+			      </div>
+			    </div>
+			  </li>
+			</ul>
+		</div>	
+		<%}} %>
+		<div class="row cl  mt-20">
+					<div class="formControls col-12">
 						<input type="text" id="cust_remark" placeholder="需要特别说明的内容" value="${order.remark}" class="textarea radius">
 					</div>
 				</div>
@@ -256,7 +282,7 @@ function order(nextAction){
 	//alert($("#l_total_cnt").html());
 	var order = {
 			id: $('#orderId').val(),
-			shipAddress: $('#cust_addr').val(),
+			//shipAddress: $('#cust_addr').val(),
 			remark: $('#cust_remark').val(),
 			totalPay:$('#i_total_m').val(),
 			prePay:$('#i_total_d').val(),
@@ -265,7 +291,7 @@ function order(nextAction){
 			items : getDataSet()
 			
 	};
-	alert(JSON.stringify(order));
+	//alert(JSON.stringify(order));
 	if(order){
 		$.ajax({ 
 	        type:"POST", 
@@ -274,19 +300,42 @@ function order(nextAction){
 	        contentType:"application/json",               
 	        data:JSON.stringify(order), 
 	        success:function(data){ 
-	        	alert(JSON.stringify(data));
+	        	//alert(JSON.stringify(data));
 	        	if(data.success){
 	        		layer.msg('审核完成！',{icon:1,time:2000}); 
 	        		//var t=window.parent; 
 	        		//if(window.parent)
 	        		//	window.parent.postMessage({type:'mycart',total:0}, '*');
-	        		//location.replace(location.href);
+	        		location.replace(location.href);
 	        	}else 
 	        		layer.msg('审核失败！请联系管理员！-'+data.desc,{icon:2,time:2000}); 
 	        } 
 	     }); 
 	}else layer.msg('请至少选择一件商品！',{icon:2,time:2000}); 
 	
+}
+
+function cancelOrder(){
+	var order = {
+			id: $('#orderId').val(),
+			remark: $('#cust_remark').val()
+	};
+	if(order){
+		$.ajax({ 
+	        type:"POST", 
+	        url:"cancelOrder.do?dt="+new Date(), 
+	        dataType:"json",      
+	        contentType:"application/json",               
+	        data:JSON.stringify(order), 
+	        success:function(data){ 
+	        	if(data.success){
+	        		layer.msg('审核完成！',{icon:1,time:2000}); 
+	        		location.replace(location.href);
+	        	}else 
+	        		layer.msg('提交失败！请联系管理员！-'+data.desc,{icon:2,time:2000}); 
+	        } 
+	     }); 
+	}else layer.msg('莫名其妙的错误！',{icon:2,time:2000}); 
 }
 
 function getDataSet(){

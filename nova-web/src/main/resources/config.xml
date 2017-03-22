@@ -56,8 +56,6 @@
 					sum(CASE curNode WHEN 6 THEN totalPay ELSE 0 END ) p6_cnt,
 					sum(CASE curNode WHEN 7 THEN totalPay ELSE 0 END ) p7_cnt
 				 from  vm_order_statics 
-
-
 			 ]]>
 		</script>
 		<script name="buzAduit">
@@ -86,13 +84,13 @@
 		</script>
 		<script name="getorderNo">
 			<![CDATA[
-				select  CONCAT(DATE_FORMAT(r.`timestamp`,'%Y%m%d'),lpad(count(1)+1,4,'0')) orderno
+				select  CONCAT(DATE_FORMAT(now(),'%Y%m%d'),lpad(count(1)+1,4,'0')) orderno
 					 from r_order r where DATE_FORMAT(r.`timestamp`,'%Y%m%d') = date_format(now(),'%Y%m%d')
 			 ]]>
 		</script>
 		<script name="canelOrder">
 			<![CDATA[
-				update r_order set curNode =7 ,oprState = 8 where id = ?
+				update r_order set curNode =7 ,oprState = 8,curOperator=0 where id = ?
 			 ]]>
 		</script>
 		<script name="canelOrderItem">
@@ -112,7 +110,7 @@
 		</script>
 		<script name="aduitOrder">
 			<![CDATA[
-			update r_order  set shipAddress = ? ,
+			update r_order  set 
 										remark = ? ,
 										totalPay = ?,
 										prePay=?,
@@ -125,9 +123,11 @@
 		<script name="getOrderByID">
 			<![CDATA[
 				select o.*,fn.nodeName,f.name as creator ,f1.name as curOper
-					from r_order o,f_flownode fn,p_staff f,p_staff f1
-				where  o.curNode = fn.id
-				and f.Id = o.staffId and f1.Id = o.curOperator and o.id = ?
+					from r_order o
+				inner JOIN f_flownode fn on o.curNode = fn.id
+				inner join p_staff f on f.Id = o.staffId
+				left JOIN p_staff f1 on f1.Id = o.curOperator
+				where  o.id = ?
 			 ]]>
 		</script>
 		<script name="getOrderItemsByOrderId">
@@ -138,18 +138,21 @@
 		<script name="getOrders">
 			<![CDATA[
 				SELECT * from (select o.id,o.name orderNo,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,
-					o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp,o.oprState
-					from r_order o,f_flownode fn,p_staff f,p_staff f1
-				where  o.curNode = fn.id
-				and f.Id = o.staffId and f1.Id = o.curOperator ) a where 1=1
+						o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp,o.oprState
+						from r_order o 
+	            INNER JOIN f_flownode fn on o.curNode = fn.id
+				      INNER JOIN p_staff f on f.Id = o.staffId 
+	            LEFT JOIN p_staff f1 on f1.Id = o.curOperator ORDER BY O.`timestamp` DESC ) a where 1=1 
 			 ]]>
 		</script>
 		<script name="getOrdersCount">
 			<![CDATA[
-				SELECT count(*) from (select o.id,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp
-					from r_order o,f_flownode fn,p_staff f,p_staff f1
-				where  o.curNode = fn.id
-				and f.Id = o.staffId and f1.Id = o.curOperator ) a where 1=1
+				SELECT count(*) from (select o.id,o.name orderNo,o.curNode,fn.nodeName,o.custName,o.totalPrd,o.totalPay,
+						o.staffId,f.name as creator ,o.curOperator,f1.name as curOper,o.timestamp,o.oprState
+						from r_order o 
+	            INNER JOIN f_flownode fn on o.curNode = fn.id
+				      INNER JOIN p_staff f on f.Id = o.staffId 
+	            LEFT JOIN p_staff f1 on f1.Id = o.curOperator  ) a where 1=1 
 			 ]]>
 		</script>
 		<script name="myOperOrdersCount">
@@ -216,6 +219,13 @@
 			]]>
 		</script>
 		
+		<script name="gerOrderCreatorBYId">
+			<![CDATA[
+			select r.staffId from r_order r,p_rolestaff rf 
+				where r.staffId = rf.staffId and r.id = ? and rf.roleId =2
+			]]>
+		</script>
+		
 		<script name="deleteorder">
 			<![CDATA[
 			delete r_order o where o.id = ?
@@ -258,6 +268,7 @@
 					p_permission p
 				where rf.staffId = ?
 				and rf.roleId = rp.roleId
+				and rp.isVaild = 0
 				and rp.permId = p.id
 				order by p.orderIndex 
 			 ]]>
@@ -276,6 +287,17 @@
 				limit ?,?
 			 ]]>
 		</script>
+		
+		<script name="autoproduct">
+			<![CDATA[
+				select  CONCAT('[',d.dictval,']',p.prdNo,'-',p.prdName) from c_product p,p_dict d 
+				where p.prdName like ?
+				and d.dictName = 'catalog'
+				and p.catalog = d.dictKey
+				limit 0,20
+			 ]]>
+		</script>
+		
 		<script name="getproductsCount">
 			<![CDATA[
 				select count(1) from c_product p
@@ -294,7 +316,7 @@
 		
 		<script name="getProductColorById">
 			<![CDATA[
-				select * from c_produt_color pc where pc.prdID = ?
+				select * from c_product_color pc where pc.prdID = ?
 			 ]]>
 		</script>
 	</scripts>

@@ -32,7 +32,6 @@
 	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 产品列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="pd-20">
 		<div class="text-c"> 
-			<input type="text" name="" id="" placeholder="类别" style="width:250px" class="input-text">
 			<input type="text" name="prdName" id="prdName" placeholder="款号" style="width:250px" class="input-text" value="<c:out value="${prdName}" />">
 			<button name="search" id="search" class="btn btn-success" type="button" onclick="goPage(1)"><i class="Hui-iconfont">&#xe665;</i> 搜产品</button>
 		</div>
@@ -52,9 +51,8 @@
 						<th width="40">ID</th>
 						<th width="60">缩略图</th>
 						<th width="100">产品名称</th>
-						<th>描述</th>
+						<th>材质</th>
 						<th width="100">类别</th>
-						<th width="100">小类</th>
 						<th width="100">价格
 							<img src="/nova-web/images/tips_icon.png" title="30件以下价格"/></th>
 						<th width="100">折扣价
@@ -68,12 +66,11 @@
 						<tr class="text-c va-m">
 							<td><input name="product" type="checkbox" value="<c:out value="${t.Id}" />"></td>
 							<td><c:out value="${t.Id}" /></td>
-							<td><a onClick="detail(<c:out value="${t.Id}" />,'<c:out value="${t.prdName}" />')" href="javascript:;"><img width="60" height="60" class="product-thumb" src="/nova-web/<c:out value="${t.prdSmallImg}" />"></a></td>
+							<td><a onClick="detail(<c:out value="${t.Id}" />,'<c:out value="${t.prdName}" />')" href="javascript:;"><img class="product-thumb" src="/nova-web/<c:out value="${t.prdSmallImg}" />"></a></td>
 							<td class="text-c"><a style="text-decoration:none" onClick="detail(<c:out value="${t.Id}" />,'<c:out value="${t.prdName}" />')" href="javascript:;">
 								<b class="text-success"><span class="label label-success radius"><c:out value="${t.catalog_name}" /></span> <c:out value="${t.prdName}" /></b> </a></td>
-							<td class="text-l"><c:out value="${t.remark}" /></td>
+							<td class="text-l"><c:out value="${t.mtlQty}" /></td>
 							<td class="text-c"><c:out value="${t.catalog_name}" /></td>
-							<td class="text-c"><c:out value="${t.prdType}" /></td>
 							<td><span class="price"><c:out value="${t.price}" /></span> </td>
 							<td><span class="price"><c:out value="${t.batchPrice}" /></span> </td>
 							<td><span class="price"><c:out value="${t.matWgt}" /></span> </td>

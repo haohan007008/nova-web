@@ -35,7 +35,11 @@
 	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 产品列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="pd-20">
 		
-		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r"> <a class="btn btn-primary radius" onclick="order(1)"  href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 保存订单</a>&nbsp;<a href="javascript:;" onclick="order(2)" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe672;</i> 提交下单</a> </span> 
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+		<span class="r"> 
+		<a href="javascript:;" onclick="order(2)" class="btn btn-danger radius">
+		<i class="Hui-iconfont">&#xe672;</i> 提交下单</a> 
+		</span> 
 		<span class="l">订货总数：<strong id="l_total_cnt">0</strong> 件，合计金额：<strong id="l_total_m" class="c-red">0</strong>元</span>，应付定金：<strong id="l_total_d" class="c-red">0</strong>元</span> </div>
 		
 		<div class="row cl mt-20">
@@ -218,6 +222,9 @@ $(function () {
 });
 
 function order(nextAction){
+	if($('#cust_name').val() =="" || $('#cust_addr').val()== "")
+		layer.msg('客户名称和地址都不能为空！',{icon:2,time:2000}); 
+	else{
 	var order = {
 			custName: $('#cust_name').val(),
 			shipAddress: $('#cust_addr').val(),
@@ -226,7 +233,7 @@ function order(nextAction){
 			items : getDataSet()
 			
 	};
-	alert(JSON.stringify(order));
+	//alert(JSON.stringify(order));
 	if(order){
 		$.ajax({ 
 	        type:"POST", 
@@ -246,7 +253,7 @@ function order(nextAction){
 	        } 
 	     }); 
 	}else layer.msg('请至少选择一件商品！',{icon:2,time:2000}); 
-	
+	}
 }
 
 function getDataSet(){

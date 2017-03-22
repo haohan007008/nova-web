@@ -56,6 +56,16 @@ public class ProductDAO {
 		return hst;
 	}
 	
+	
+	public List<Hashtable<String, Object>> autoProductList(String prdName){
+		List<Object> parameters = new ArrayList<>();
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("autoproduct");
+		parameters.add("%"+prdName+"%");
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, parameters);
+		return hst;
+	}
+	
 	/**
 	 * getProductsCount
 	 *

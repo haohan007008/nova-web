@@ -22,6 +22,45 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+	    <groupId>org.activiti</groupId>
+	    <artifactId>activiti-engine</artifactId>
+	    <version>5.18.0</version>
+	</dependency>
+	<dependency>  
+            <groupId>org.activiti</groupId>  
+            <artifactId>activiti-spring</artifactId>  
+            <version>5.18.0</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.activiti</groupId>  
+            <artifactId>activiti-explorer</artifactId>  
+            <version>5.18.0</version>  
+             <exclusions>
+			    <exclusion>
+			     <artifactId>vaadin</artifactId>
+			     <groupId>com.vaadin</groupId>
+			    </exclusion>
+			    <exclusion>
+			     <artifactId>dcharts-widget</artifactId>
+			     <groupId>org.vaadin.addons</groupId>
+			    </exclusion>
+			    <exclusion>
+			     <artifactId>activiti-simple-workflow</artifactId>
+			     <groupId>org.activiti</groupId>
+			    </exclusion>
+			   </exclusions>
+        </dependency>
+    <dependency>  
+            <groupId>org.mybatis</groupId>  
+            <artifactId>mybatis</artifactId>  
+            <version>3.2.5</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.mybatis</groupId>  
+            <artifactId>mybatis-spring</artifactId>  
+            <version>1.2.2</version>  
+        </dependency> 
     <dependency>  
         <groupId>org.springframework</groupId>  
         <artifactId>spring-core</artifactId>  
@@ -42,7 +81,11 @@
         <artifactId>spring-context</artifactId>  
         <version>${spring.version}</version>  
     </dependency>  
-       
+       <dependency>  
+        <groupId>org.springframework</groupId>  
+        <artifactId>spring-orm</artifactId>  
+        <version>${spring.version}</version>  
+    </dependency>  
     <dependency>  
         <groupId>jstl</groupId>  
         <artifactId>jstl</artifactId>  
@@ -93,6 +136,16 @@
 		    <artifactId>fastjson</artifactId>
 		    <version>1.2.12</version>
 		</dependency>
+		<dependency>  
+            <groupId>javax.annotation</groupId>  
+            <artifactId>javax.annotation-api</artifactId>  
+            <version>1.2</version>  
+        </dependency>
+        <dependency>  
+            <groupId>joda-time</groupId>  
+            <artifactId>joda-time</artifactId>  
+            <version>2.1</version>  
+        </dependency>
   </dependencies>
 	<build>
 		<finalName>nova-web</finalName>

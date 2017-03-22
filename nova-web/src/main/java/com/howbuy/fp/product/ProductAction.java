@@ -32,6 +32,14 @@ public class ProductAction {
 	@Autowired
 	private ProductService productService;
 	
+	@RequestMapping(value ="/product/autoprd",method = {RequestMethod.GET })
+	@ResponseBody
+	public  String autoprd(HttpServletRequest request){
+		String prdName = "";
+		
+        return JSON.toJSONString(productService.autoProductList(prdName).getObj());
+	}
+	
 	@RequestMapping(value="/getproducts", produces = "application/json; charset=utf-8")
 	public  String getproducts(HttpServletRequest request, HttpServletResponse response,HttpSession session){
 		

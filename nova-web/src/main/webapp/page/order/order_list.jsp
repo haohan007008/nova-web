@@ -73,11 +73,19 @@
 					<c:forEach items="${ordlist}" var="t">  
 				<tr class="text-c va-m">
 							<td><input name="product" type="checkbox" value=""></td>
-							<td>${t.orderNo} </td>
+							<td><a onClick="order_view(${t.id},'${t.orderNo}')" href="javascript:;">${t.orderNo} </a></td>
 							<td><a onClick="detail(${t.id},'${t.orderNo}')" href="javascript:;">${t.custName}</a></td>
 							<td class="text-c">${t.totalPrd}</td>
 							<td class="text-c">${t.totalPay}</td>
-							<td class="text-c"><span class="label label-danger radius">${t.nodeName}</span></td>
+							<td class="text-c"><span class="label 
+							<c:if test="${t.curNode==1}">label-success</c:if>
+							<c:if test="${t.curNode==2}">label-danger</c:if>
+							<c:if test="${t.curNode==3}">label-secondary</c:if>
+							<c:if test="${t.curNode==4}">label-warning</c:if>
+							<c:if test="${t.curNode==5}">label-success</c:if>
+							<c:if test="${t.curNode==6}">label-primary</c:if>
+							<c:if test="${t.curNode==7}">label-default</c:if>
+							 radius">${t.nodeName}</span></td>
 							<td class="text-c">${t.creator}</td>
 							<td class="text-c">${t.timestamp}</td>
 							<td class="text-c">${t.curOper}</td>
@@ -180,7 +188,20 @@ function detail(ordId,custName){
 	if(t)
 	t.postMessage({id:'ord'+ordId,title:custName,url:'order/getorder.do?rid='+ ordId}, '*'); 
 }
-
+function order_view(ordId,orderNo){
+	
+	var t=window.parent; 
+	if(t)
+		t.order_view(ordId,orderNo);
+	/*
+	var index = layer.open({
+		type: 2,
+		title: '订单号：'+orderNo,
+		content: 'order/getorder.do?rid='+ ordId
+	});
+	layer.full(index);
+	*/
+}
 /*图片-删除*/
 function product_del(obj,id){
 	layer.confirm('确认要删除吗？',function(index){
@@ -188,6 +209,8 @@ function product_del(obj,id){
 		layer.msg('已删除!',{icon:1,time:1000});
 	});
 }
+
+
 </script>
 </body>
 </html>

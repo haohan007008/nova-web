@@ -76,11 +76,11 @@
     </form>
   </div>
 </div>
-<div class="footer">Copyright 好买财富 by H-ui.admin.v2.3</div>
+<div class="footer">Copyright 上海傲奇服饰 by H-ui.admin.v2.3</div>
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="lib\jquery.validation\1.14.0\jquery.validate.min.js"></script>
 <script type="text/javascript" src="lib\jquery.validation\1.14.0\messages_zh.min.js"></script>
-<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/H-ui.js"></script> 
 <script type="text/javascript">
 function chageCode(){

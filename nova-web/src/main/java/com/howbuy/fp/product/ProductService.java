@@ -32,6 +32,16 @@ public class ProductService {
 		return resp;
 	}
 	
+	
+	public RespResult<List<Hashtable<String, Object>>> autoProductList(
+			String prdName){
+		RespResult<List<Hashtable<String, Object>>> resp = new RespResult<>();
+		List<Hashtable<String, Object>> hst = productDAO.autoProductList(prdName);
+		resp.setObj(hst);
+		resp.setTotal(productDAO.getProductsCount(prdName));
+		return resp;
+	}
+	
 	public Product getProductById(int prdId){
 		return productDAO.getProductById(prdId);
 	}

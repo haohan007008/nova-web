@@ -38,7 +38,7 @@
 	<div class="pd-10">
 		<div class="mt-10" style="border:1px solid #E8E8E8;height:320px;padding:5 5;">
 			<div class="text-c " style="float:left; padding:10px 10px;">
-				<img width="300" height="300" src="/nova-web/<c:out value="${product.prdImg}" />1">
+				<img width="300" height="300" src="/nova-web/<c:out value="${product.prdImg}" />">
 				<input type="hidden" id="prdId" value="${product.id}">
 			</div>
 			<div class="text-l" style=" margin-left:320px;paddin:20px 20px; height:300px;">
