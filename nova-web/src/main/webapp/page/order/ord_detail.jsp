@@ -130,14 +130,7 @@
 								 <input type="text" name="subtotal" class="input-text text-c" value="<%=pItem.getSubTotal() %>">
 							 </td>
 							<td>
-								<% 
-								if(pItem.getTotalCount() >=30){
-									%>
-									<input type="text"  name="price" class="input-text text-c" value="<%=new java.text.DecimalFormat("#.00").format(product.getBatchPrice()) %>">
-									<%
-								}else{%>
-								<input type="text"  name="price" class="input-text text-c" value="<%=new java.text.DecimalFormat("#.00").format(product.getPrice()) %>">
-								<%} %>
+								<input type="text"  name="price" class="input-text text-c" value="<%=new java.text.DecimalFormat("#.00").format(pItem.getPrice()) %>">
 							 </td>
 							<td><span class="price"><%=new java.text.DecimalFormat("#.00").format(product.getBatchPrice()) %>/<%=new java.text.DecimalFormat("#.00").format(product.getPrice()) %></span></td>
 							<td class="f-14"><a style="text-decoration:none" class="ml-5" onClick="del_tr('<%=product.getId() %>','<%=pItem.getId() %>')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>

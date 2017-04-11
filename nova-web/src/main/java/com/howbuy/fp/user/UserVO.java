@@ -4,6 +4,9 @@ import java.util.List;
 
 public class UserVO {
 	private int userId;
+	private String userPwd;
+	private String oldPwd;
+	
 	private String userName;
 	private String loginName;
 	private String address ;
@@ -17,7 +20,18 @@ public class UserVO {
 	private List<RoleVO> roles;
 	private List<PermVO> perms;
 	private int myOrderCount=0;
-	
+	public String getOldPwd() {
+		return oldPwd;
+	}
+	public void setOldPwd(String oldPwd) {
+		this.oldPwd = oldPwd;
+	}
+	public String getUserPwd() {
+		return userPwd;
+	}
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
+	}
 	public int getMyOrderCount() {
 		return myOrderCount;
 	}

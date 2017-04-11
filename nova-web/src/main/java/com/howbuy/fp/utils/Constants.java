@@ -22,6 +22,16 @@ public class Constants {
 	public final static String ORDER_MY_CREATED = "3";
 	
 	
+	
+	public static String lpad(String str,int num,String pad){  
+	    String n_str=str;  
+	    if(str==null)  
+	    n_str= " ";  
+	    for(int i=str.length();i <num;i++){  
+	    n_str=pad+n_str;  
+	    }  
+	    return n_str;  
+	  }   
 	 public static String getUUID(){ 
 	        String s = UUID.randomUUID().toString(); 
 	        return s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24); 
@@ -40,7 +50,7 @@ public class Constants {
 	public static BigDecimal toDouble(Object obj){
 		
 		if(Constants.isBlank(obj))
-			return null;
+			return new BigDecimal(0);
 		
 		try {
 			return new BigDecimal(Double.parseDouble(obj.toString())).setScale(6,BigDecimal.ROUND_HALF_UP);

@@ -1,18 +1,16 @@
 package com.howbuy.fp.utils;
 
 import java.io.File;
-import java.io.FileInputStream;  
-import java.sql.Connection;  
-import java.sql.SQLException;  
-import java.util.Properties;  
-  
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Properties;
 
-import javax.sql.DataSource;  
-  
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-import com.mchange.v2.c3p0.DataSources;  
+import com.mchange.v2.c3p0.DataSources;
 
 public class C3P0Connection {
 	private static Logger log = Logger.getLogger(C3P0Connection.class);

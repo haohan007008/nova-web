@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSON;
 public class RespResult<T> {
 	private boolean success = true;
 	private int total;
+
 	
 	public int getTotal() {
 		return total;

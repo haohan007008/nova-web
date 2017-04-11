@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.howbuy.fp.product.Product;
 import com.howbuy.fp.utils.RespResult;
 
 /** 
@@ -27,6 +28,21 @@ public class OrderService {
 
 	public void setOrderDAO(OrderDAO orderDAO) {
 		this.orderDAO = orderDAO;
+	}
+	
+	
+	public RespResult<List<Product>> queryProductOrder(String prdNo) {
+		RespResult<List<Product>> resp = new RespResult<>();
+		List<Product> hst = orderDAO.queryProductOrder(prdNo+"%");
+		resp.setObj(hst);
+		return resp;
+	}
+	
+	public RespResult<List<Product>> queryProductOrder1(String prdNo) {
+		RespResult<List<Product>> resp = new RespResult<>();
+		List<Product> hst = orderDAO.queryProductOrderStore(prdNo+"%");
+		resp.setObj(hst);
+		return resp;
 	}
 
 	public RespResult<String> addOrder(Order order){

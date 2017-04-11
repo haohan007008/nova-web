@@ -1,6 +1,5 @@
 package com.howbuy.fp.action;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,6 @@ import com.alibaba.fastjson.JSON;
 import com.howbuy.fp.factor.Factor;
 import com.howbuy.fp.factor.FactorDAO;
 import com.howbuy.fp.utils.PagedResult;
-import com.mchange.v1.util.ArrayUtils;
 
 /** 
  * @author LvMeng

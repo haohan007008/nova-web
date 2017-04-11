@@ -52,7 +52,7 @@
       <div class="row cl">
         <label class="form-label col-3"><i class="Hui-iconfont">&#xe60e;</i></label>
         <div class="formControls col-8">
-          <input id="userpwd" name="userpwd" type="password" placeholder="密码" class="input-text size-L" data-toggle="tooltip" data-placement="bottom">
+          <input id="userpwd" name="userpwd" type="password" placeholder="密码" class="input-text size-L" data-toggle="tooltip" data-placement="bottom" autocomplete="off">
         </div>
       </div>
       <div class="row cl">
@@ -76,7 +76,7 @@
     </form>
   </div>
 </div>
-<div class="footer">Copyright 上海傲奇服饰 by H-ui.admin.v2.3</div>
+<div class="footer">Copyright meng.lv by H-ui.admin.v2.3</div>
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="lib\jquery.validation\1.14.0\jquery.validate.min.js"></script>
 <script type="text/javascript" src="lib\jquery.validation\1.14.0\messages_zh.min.js"></script>

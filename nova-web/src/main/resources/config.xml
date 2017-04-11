@@ -3,8 +3,133 @@
 	<variables>
 		<variable name="dubbo_config_xml"><![CDATA[classpath*:/conf/applicationContext-dubbo.xml]]></variable>
 		<variable name="data_page_size">50</variable>
-	</variables>	
+	</variables>
 	<scripts>
+		<script name="UPDADE_USER_INFO">
+			UPDATE p_staff SET loginPwd =? ,telphone1 =?,telphone2=?,address=? WHERE id=? AND loginPwd = ?
+		</script>
+		<script name="UPDADE_USER_INFO_1">
+			UPDATE p_staff SET telphone1 =?,telphone2=?,address=? WHERE id=?
+		</script>
+		<script name="last_productionId">
+			<![CDATA[
+				select max(id)+1 from m_production
+			 ]]>
+		</script>
+		<script name="insert_production">
+			INSERT INTO m_production(id,contractNo,manufacturer,signTime,signAddress,prdNum,amount,linkStaff,payBank,payNo,manufacturerAddress,telphone)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+		</script>
+		<script name="insert_productionitem">
+			INSERT INTO m_productionitem(pId,prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,prdNum,amount,remark,deliveryTime,STATUS)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		</script>
+		<script name="query_production">
+			SELECT a.*,c.`name` curOperatorName,b.name creatorName,d.`nodeName` 
+			FROM m_production a
+			LEFT JOIN p_staff b ON a.`creatorId` = b.id
+			LEFT JOIN p_staff c ON a.`curOperatorId` = c.`Id`
+			LEFT JOIN f_flownode d ON a.`flowId` = a.`flowId` AND a.`curNode` = d.`Id`
+		</script>
+		<script name="query_production_count">
+			SELECT count(1) 
+			FROM m_production a
+			LEFT JOIN p_staff b ON a.`creatorId` = b.id
+			LEFT JOIN p_staff c ON a.`curOperatorId` = c.`Id`
+			LEFT JOIN f_flownode d ON a.`flowId` = a.`flowId` AND a.`curNode` = d.`Id`
+		</script>
+		<script name="in_store">
+			INSERT INTO T_STORE(prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,nunno)
+			VALUES (?,?,?,?,?,?,?,?,?,?)
+		</script>
+		<script name="update_store">
+			UPDATE nxs=nxs+?,ns=ns+?,nm=nm+?,nl=nl+?,nxl=nxl+?,nxxl=nxxl+?,nxxxl=nxxxl+?,nunno=nunno+?
+			where prdId=? and prdColorId = ?
+		</script>
+		<script name="prd_in_store">
+			SELECT COUNT(1) FROM t_store WHERE prdId =? AND prdColorId = ?
+		</script>
+		<script name="store_query">
+			SELECT b.prdNo,c.colorName,a.* FROM  t_store a,c_product b,c_product_color c
+			WHERE a.`prdId` = b.id AND a.`prdColorId` = c.id
+		</script>
+		<script name="product_order_query">
+			SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,
+			d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,
+			SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl
+			FROM r_order a,r_orderitem b,c_product c,c_product_color d
+			WHERE a.id = b.orderId
+			AND b.`prdId` = c.`Id`
+			AND b.`prdColorId` = d.`Id`
+			AND d.`isVaild` = 0
+			AND a.`oprState` = 0
+			AND a.`curNode` = 5
+			AND b.oprState = 0
+			AND c.prdNo LIKE ?
+			GROUP BY c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.`colorName`,d.`colorNo`,c.`mtlQty`
+			ORDER BY REPLACE(c.`prdNo`,'16','99') ASC
+		</script>
+		
+		<script name="product_order_store_query_bk">
+			SELECT r.*,s.* FROM (SELECT c.id,c.`prdNo`,d.id colorId,c.`prdSmallImg`,c.`prdName`,
+			d.`colorName`,SUM(b.`prdNum`) prdNum,SUM(b.`ns`) ons,
+			SUM(b.`nm`) onm,SUM(b.`nl`) onl,SUM(b.`nxl`) onxl,SUM(b.`nxxl`) onxxl
+			FROM r_order a,r_orderitem b,c_product c,c_product_color d
+			WHERE a.id = b.orderId
+			AND b.`prdId` = c.`Id`
+			AND b.`prdColorId` = d.`Id`
+			AND d.`isVaild` = 0
+			AND a.`oprState` = 0
+			AND a.`curNode` = 5
+			AND b.oprState = 0
+			GROUP BY c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.`colorName`,d.`colorNo`) r
+			LEFT JOIN t_store s ON r.id = s.prdId AND r.colorId = s.`prdColorId`
+			WHERE r.prdNo LIKE ?
+			ORDER BY REPLACE(r.`prdNo`,'16','99') ASC
+		</script>
+		<script name="product_order_store_query">
+			SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,
+			d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,
+			SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl
+			FROM r_order a,r_orderitem b,c_product c,c_product_color d
+			WHERE a.id = b.orderId
+			AND b.`prdId` = c.`Id`
+			AND b.`prdColorId` = d.`Id`
+			AND d.`isVaild` = 0
+			AND a.`oprState` = 0
+			AND a.`curNode` = 5
+			AND b.oprState = 0
+			and b.mntState = 0
+			AND c.prdNo LIKE ?
+			GROUP BY c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.`colorName`,d.`colorNo`,c.`mtlQty`
+			ORDER BY REPLACE(c.`prdNo`,'16','99') ASC
+		</script>
+		
+		<script name="productcatalog">
+			SELECT * FROM p_dict WHERE dictName='catalog'
+		</script>
+		
+		<script name="add_c_product_color">
+			INSERT INTO c_product_color(prdId,colorNo,colorName,remark)VALUES(?,?,?,?)
+		</script>
+		
+		<script name="update_c_product_color">
+			UPDATE c_product_color set isVaild =? ,remark = ? WHERE id = ? 
+		</script>
+		
+		<script name="updateProductShelf">
+			UPDATE c_product SET isVaild=? WHERE id = ?
+		</script>
+		
+		<script name="addProduct">
+			INSERT INTO c_product(prdNo,prdName,catalog,prdSmallImg,prdImg,matWgt,price,
+				batchPrice,remark,sampleTime,sampleWgt,colorRatio,isVaild)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+		</script>
+		<script name="updateProduct">
+			UPDATE c_product SET prdNo=?,prdName=?,catalog=?,prdSmallImg=?,prdImg=?,matWgt=?,price=?,
+			batchPrice=?,remark=?,sampleTime=?,sampleWgt=?,colorRatio=?,isVaild=? WHERE id = ?
+		</script>
 		<script name="report_orders_day">
 			<![CDATA[
 				select dt,
@@ -35,7 +160,7 @@
 				union ALL
 				select '合计',
 					sum(CASE curNode WHEN 1 THEN cnt ELSE 0 END ) s1_cnt,
-				  sum(CASE curNode WHEN 2 THEN cnt ELSE 0 END ) s2_cnt,
+				    sum(CASE curNode WHEN 2 THEN cnt ELSE 0 END ) s2_cnt,
 					sum(CASE curNode WHEN 3 THEN cnt ELSE 0 END ) s3_cnt,
 					sum(CASE curNode WHEN 4 THEN cnt ELSE 0 END ) s4_cnt,
 					sum(CASE curNode WHEN 5 THEN cnt ELSE 0 END ) s5_cnt,
@@ -84,7 +209,7 @@
 		</script>
 		<script name="getorderNo">
 			<![CDATA[
-				select  CONCAT(DATE_FORMAT(now(),'%Y%m%d'),lpad(count(1)+1,4,'0')) orderno
+				select  MAX(r.name) orderno
 					 from r_order r where DATE_FORMAT(r.`timestamp`,'%Y%m%d') = date_format(now(),'%Y%m%d')
 			 ]]>
 		</script>
@@ -205,16 +330,35 @@
 				o.price = (select if((o.nxxl + o.nxl + o.nl + o.nm + o.ns) >= 30,p.batchPrice,p.price) from c_product p where p.id = o.prdId),
 				o.subtotal = (select (if((o.nxxl + o.nxl + o.nl + o.nm + o.ns) >= 30,p.batchPrice,p.price))*(nxxl + o.nxl + o.nl + o.nm + o.ns)
 						from c_product p where p.id = o.prdId) 
-			where o.orderId = ?
+			where o.orderId = ? and o.oprState=0
+			]]>
+		</script>
+		<script name="updateorderitems1">
+			<![CDATA[
+			UPDATE r_orderitem o SET 
+			o.price = (
+			SELECT IF(prdCnt.prdNum >=30,prdCnt.batchPrice,prdCnt.price) FROM (
+			SELECT i.prdId,p.`price`,p.`batchPrice`,SUM(i.prdNum) prdNum 
+				FROM r_orderitem i,c_product p WHERE i.orderId = ? AND p.id = i.`prdId`
+				and i.oprState=0
+			GROUP BY i.prdId ,p.`price`,p.`batchPrice` ) prdCnt WHERE prdCnt.prdId = o.prdId )
+			WHERE o.orderId = ? and o.oprState=0
+			]]>
+		</script>
+		<script name="updateorderitems2">
+			<![CDATA[
+			UPDATE r_orderitem o SET 
+			o.subtotal = o.`prdNum` * o.`price`
+			WHERE o.orderId = ? and o.oprState=0
 			]]>
 		</script>
 		<script name="updateorder">
 			<![CDATA[
 			update r_order o 
-				set o.totalPay = (select sum(subTotal) from r_orderitem i where i.orderId = o.id),
-					  o.prePay = (select sum(subTotal)*0.4 from r_orderitem i where i.orderId = o.id),
-						o.lastPay = (select sum(subTotal)*0.6 from r_orderitem i where i.orderId = o.id),
-						o.totalPrd = (select sum(prdNum) from r_orderitem i where i.orderId = o.id)
+				set o.totalPay = (select sum(subTotal) from r_orderitem i where i.orderId = o.id and i.oprState=0),
+					  o.prePay = (select sum(subTotal)*0.4 from r_orderitem i where i.orderId = o.id and i.oprState=0),
+						o.lastPay = (select sum(subTotal)*0.6 from r_orderitem i where i.orderId = o.id and i.oprState=0),
+						o.totalPrd = (select sum(prdNum) from r_orderitem i where i.orderId = o.id and i.oprState=0)
 				where  id = ?
 			]]>
 		</script>
@@ -284,6 +428,16 @@
 				where p.prdName like ?
 				and d.dictName = 'catalog'
 				and p.catalog = d.dictKey
+				and p.isVaild = 0
+				limit ?,?
+			 ]]>
+		</script>
+		<script name="getAllproducts">
+			<![CDATA[
+				select p.*,d.dictval catalog_name from c_product p,p_dict d 
+				where p.prdName like ?
+				and d.dictName = 'catalog'
+				and p.catalog = d.dictKey
 				limit ?,?
 			 ]]>
 		</script>
@@ -301,10 +455,15 @@
 		<script name="getproductsCount">
 			<![CDATA[
 				select count(1) from c_product p
-				where p.prdName like ?
+				where p.prdName like ? and p.isVaild=0
 			 ]]>
 		</script>
-		
+		<script name="getallproductsCount">
+			<![CDATA[
+				select count(1) from c_product p
+				where p.prdName like ? 
+			 ]]>
+		</script>
 		<script name="getproductById">
 			<![CDATA[
 				select p.*,d.dictval catalog_name from c_product p,p_dict d 
@@ -317,6 +476,11 @@
 		<script name="getProductColorById">
 			<![CDATA[
 				select * from c_product_color pc where pc.prdID = ?
+			 ]]>
+		</script>
+		<script name="getProductColorByIdStatus">
+			<![CDATA[
+				select * from c_product_color pc where pc.prdID = ? and isVaild = ?
 			 ]]>
 		</script>
 	</scripts>

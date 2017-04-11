@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
-import org.springframework.objenesis.instantiator.basic.NewInstanceInstantiator;
 import org.springframework.stereotype.Repository;
 
 import com.alibaba.fastjson.JSON;
@@ -264,7 +263,7 @@ public class SqlHelper {
                 pstmt = conn.prepareStatement(sql);
                 rs = pstmt.executeQuery();
             }
-            if(rs.next())
+            if(rs.next() && rs.getObject(1) != null )
             	retVal = rs.getObject(1).toString();
         } catch (SQLException e) {
             log.error(e);

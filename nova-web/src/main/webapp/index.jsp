@@ -22,12 +22,12 @@
 <link href="lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
 <link href="skin/default/skin.css" rel="stylesheet" type="text/css" id="skin" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
-<title>傲奇服饰.admin v1.0</title>
+<title>lm.admin v1.0</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 </head>
 <body>
-<header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/">傲奇服饰  - 订单管理</a> <a class="Hui-logo-m l" href="/" title="H-ui.admin">Monitor</a> <span class="Hui-subtitle l">V1.0</span>
+<header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/">H-ui.admin</a> <a class="Hui-logo-m l" href="/" title="H-ui.admin">Monitor</a> <span class="Hui-subtitle l">V1.0</span>
 	<c:if test="${user!=null && user.perms!=null && fn:length(user.perms) > 0}">
 	<nav class="mainnav cl" id="Hui-nav">
 		<ul>
@@ -53,7 +53,7 @@
 		
 		<li class="dropDown dropDown_hover"><a href="#" class="dropDown_A"><i class="Hui-iconfont" style="font-size:18px">&#xe705;</i></a>
 			<ul class="dropDown-menu radius box-shadow">
-				<li><a href="#">个人信息</a></li>
+				<li><a href="#" onclick="layershow('编辑个人资料','user/profile.do',800,600)">个人信息</a></li>
 				<li><a href="#">切换账户</a></li>
 				<li><a href="logout.do">退出</a></li>
 			</ul>
@@ -107,7 +107,7 @@
 	<div id="iframe_box" class="Hui-article">
 		<div class="show_iframe">
 			<div style="display:none" class="loading"></div>
-			<iframe scrolling="yes" frameborder="0" src="welcome.do"></iframe>
+			<iframe id="mainframe" scrolling="yes" frameborder="0" src="welcome.do"></iframe>
 		</div>
 	</div>
 </section>
@@ -146,7 +146,7 @@ function product_add(title,url){
 	layer.full(index);
 }
 /*用户-添加*/
-function member_add(title,url,w,h){
+function layershow(title,url,w,h){
 	layer_show(title,url,w,h);
 }
 

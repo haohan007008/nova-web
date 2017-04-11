@@ -1,7 +1,11 @@
 package com.howbuy.fp.order;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -37,6 +41,145 @@ public class OrderDAO {
 	public void setSqlHelper(SqlHelper sqlHelper) {
 		this.sqlHelper = sqlHelper;
 	}
+	
+	//product_order_query
+	public List<Product> queryProductOrder(String prdNo){
+		ConfContext context = this.sqlHelper.getSqlContext();
+		List<Object> parameters = new ArrayList<>();
+		String sql = context.getScript("product_order_query");
+		parameters.add(prdNo);
+		log.info("sql:"+sql);
+		Map<String, Product> prds = new HashMap<>();
+		
+		List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, parameters);
+		if(hst != null && hst.size() > 0){
+			for(Hashtable<String, Object> ht : hst){
+				Product prd = prds.get(ht.get("prdNo").toString());
+				if(prd != null ){
+					//已存在对象
+					ProductColorItem pItem = new ProductColorItem();
+					//pItem.setId(Constants.toDouble(ht.get("Id")).intValue());
+					pItem.setColorName(ht.get("colorName").toString());
+					pItem.setColorNo(ht.get("colorNo").toString());
+					pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
+					pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+					pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
+					pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
+					pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
+					pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
+					pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+					prd.getItems().add(pItem);
+				}else{
+					Product pd = new Product();
+					pd.setId(Constants.toDouble(ht.get("id")).intValue());	
+					pd.setPrdSmallImg(ht.get("prdSmallImg").toString());
+					pd.setPrdName(ht.get("prdName").toString());
+					pd.setPrdNo(ht.get("prdNo").toString());
+					pd.setMtlQty(ht.get("mtlQty")==null?"":ht.get("mtlQty").toString());
+					ProductColorItem pItem = new ProductColorItem();
+					//pItem.setId(Constants.toDouble(ht.get("Id")).intValue());
+					pItem.setColorName(ht.get("colorName").toString());
+					pItem.setColorNo(ht.get("colorNo").toString());
+					pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
+					pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+					pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
+					pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
+					pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
+					pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
+					pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+					List<ProductColorItem> items = new ArrayList<>();
+					items.add(pItem);
+					pd.setItems(items);
+					
+					prds.put(pd.getPrdNo(), pd);
+				};
+			}
+			
+		}
+		
+		List<Product> valuesList = new ArrayList<Product>(prds.values());
+		Collections.sort(valuesList);
+		return valuesList;
+	}
+	
+	
+	//product_order_query
+		public List<Product> queryProductOrderStore(String prdNo){
+			ConfContext context = this.sqlHelper.getSqlContext();
+			List<Object> parameters = new ArrayList<>();
+			String sql = context.getScript("product_order_store_query");
+			parameters.add(prdNo);
+			log.info("sql:"+sql);
+			Map<String, Product> prds = new HashMap<>();
+			
+			List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sql, parameters);
+			if(hst != null && hst.size() > 0){
+				for(Hashtable<String, Object> ht : hst){
+					Product prd = prds.get(ht.get("prdNo").toString());
+					if(prd != null ){
+						//已存在对象
+						ProductColorItem pItem = new ProductColorItem();
+						pItem.setId(Constants.toDouble(ht.get("colorId")).intValue());
+						pItem.setPrdId(Constants.toDouble(ht.get("id")).intValue());
+						pItem.setColorName(ht.get("colorName").toString());
+						//pItem.setColorNo(ht.get("colorNo").toString());
+						//pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
+						pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+						pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
+						pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
+						pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
+						pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
+						pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
+						pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+						pItem.setNxxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+						pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
+						pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
+						pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
+						pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
+						pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
+						pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
+						prd.getItems().add(pItem);
+					}else{
+						Product pd = new Product();
+						pd.setId(Constants.toDouble(ht.get("id")).intValue());	
+						pd.setPrdSmallImg(ht.get("prdSmallImg").toString());
+						pd.setPrdName(ht.get("prdName").toString());
+						pd.setPrdNo(ht.get("prdNo").toString());
+						
+						ProductColorItem pItem = new ProductColorItem();
+						pItem.setPrdId(Constants.toDouble(ht.get("id")).intValue());
+						pItem.setId(Constants.toDouble(ht.get("colorId")).intValue());
+						pItem.setColorName(ht.get("colorName").toString());
+						//pItem.setColorNo(ht.get("colorNo").toString());
+						//pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
+						pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+						pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
+						pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
+						pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
+						pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
+						pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
+						pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+						pItem.setNxxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+						pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
+						pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
+						pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
+						pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
+						pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
+						pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
+						List<ProductColorItem> items = new ArrayList<>();
+						items.add(pItem);
+						pd.setItems(items);
+						
+						prds.put(pd.getPrdNo(), pd);
+					};
+				}
+				
+			}
+			
+			List<Product> valuesList = new ArrayList<Product>(prds.values());
+			Collections.sort(valuesList);
+			return valuesList;
+		}
 	
 	/**
 	 * cancelOrder 取消订单
@@ -121,6 +264,8 @@ public class OrderDAO {
 				
 				this.sqlHelper.executeBatch(context.getScript("addorderitem"), params, "");
 				this.sqlHelper.executeUpdate(context.getScript("updateorderitems"), new ArrayList<Object>(Arrays.asList(lastId)));
+				this.sqlHelper.executeUpdate(context.getScript("updateorderitems1"), new ArrayList<Object>(Arrays.asList(lastId,lastId)));
+				this.sqlHelper.executeUpdate(context.getScript("updateorderitems2"), new ArrayList<Object>(Arrays.asList(lastId)));
 				this.sqlHelper.executeUpdate(context.getScript("updateorder"), new ArrayList<Object>(Arrays.asList(lastId)));
 				this.addorderlog(lastId, order.getStaffId(), "1", order.getRemark());
 			} catch (Exception e) {
@@ -377,7 +522,18 @@ public class OrderDAO {
 	public synchronized String getOrderNo(){
 		ConfContext context = this.sqlHelper.getSqlContext();
 		String sql = context.getScript("getorderNo");
-		return this.sqlHelper.query4OneVal( sql, null);
+		String orderNo = this.sqlHelper.query4OneVal( sql, null);
+		
+		if(Constants.isBlank(orderNo) || orderNo.length() != 12){
+			Date currentTime = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+			//String dateString = formatter.format(currentTime);
+			orderNo = formatter.format(currentTime) + "0001";
+		}else{
+			orderNo = orderNo.substring(0,8) + 
+					Constants.lpad(String.valueOf(Integer.parseInt(orderNo.substring(9))+1),4,"0");
+		}
+		return orderNo;
 	}
 	
 	/**

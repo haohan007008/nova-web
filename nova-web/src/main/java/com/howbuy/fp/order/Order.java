@@ -13,12 +13,29 @@ import com.howbuy.fp.product.ProductColorItem;
 public class Order {
 	private int id;
 	private String orderNo;
-	public String getOrderNo() {
-		return orderNo;
+	private double midPay;
+	public double getMidPay() {
+		return midPay;
 	}
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
+	public void setMidPay(double midPay) {
+		this.midPay = midPay;
 	}
+	public String getMidePayTime() {
+		return midePayTime;
+	}
+	public void setMidePayTime(String midePayTime) {
+		this.midePayTime = midePayTime;
+	}
+	
+	private String midePayTime;
+	private boolean tax;
+	public boolean isTax() {
+		return tax;
+	}
+	public void setTax(boolean tax) {
+		this.tax = tax;
+	}
+
 	private int custId ;
 	private String custName;
 	private String custAddr;
@@ -45,6 +62,13 @@ public class Order {
 	private List<ProductColorItem> items;
 	private List<Product> prds;
 	private List<Hashtable<String, Object>> logs;
+	public String getOrderNo() {
+		return orderNo;
+	}
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+	
 	public List<Hashtable<String, Object>> getLogs() {
 		return logs;
 	}

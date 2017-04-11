@@ -13,9 +13,130 @@ public class ProductColorItem {
 	private int nl = 0;
 	private int nxl = 0;
 	private int nxxl = 0;
-	
-	
+	private int nxs =0;
+	private int nxxxl = 0;
+	private int ons = 0;
+	private int nunno = 0;
+	public int getNunno() {
+		return nunno;
+	}
+
+	public void setNunno(int nunno) {
+		this.nunno = nunno;
+	}
+
+	public int getOns() {
+		return ons;
+	}
+
+	public void setOns(int ons) {
+		this.ons = ons;
+	}
+
+	public int getOnm() {
+		return onm;
+	}
+
+	public void setOnm(int onm) {
+		this.onm = onm;
+	}
+
+	public int getOnl() {
+		return onl;
+	}
+
+	public void setOnl(int onl) {
+		this.onl = onl;
+	}
+
+	public int getOnxl() {
+		return onxl;
+	}
+
+	public void setOnxl(int onxl) {
+		this.onxl = onxl;
+	}
+
+	public int getOnxxl() {
+		return onxxl;
+	}
+
+	public void setOnxxl(int onxxl) {
+		this.onxxl = onxxl;
+	}
+
+	public int getOnxs() {
+		return onxs;
+	}
+
+	public void setOnxs(int onxs) {
+		this.onxs = onxs;
+	}
+
+	public int getOnxxxl() {
+		return onxxxl;
+	}
+
+	public void setOnxxxl(int onxxxl) {
+		this.onxxxl = onxxxl;
+	}
+
+	private int onm = 0;
+	private int onl = 0;
+	private int onxl = 0;
+	private int onxxl = 0;
+	private int onxs =0;
+	private int onxxxl = 0;
+	private int status;
 	private int prdNum = 0;
+	private String deliveryTime;
+	
+	
+	
+	public int getNxs() {
+		return nxs;
+	}
+
+	public void setNxs(int nxs) {
+		this.nxs = nxs;
+	}
+
+	public int getNxxxl() {
+		return nxxxl;
+	}
+
+	public void setNxxxl(int nxxxl) {
+		this.nxxxl = nxxxl;
+	}
+
+	public String getDeliveryTime() {
+		return deliveryTime;
+	}
+
+	public void setDeliveryTime(String deliveryTime) {
+		this.deliveryTime = deliveryTime;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	private String remark;
+	
+	
+	
 	public int getPrdNum() {
 		return prdNum;
 	}

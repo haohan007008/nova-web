@@ -1,21 +1,16 @@
 package com.howbuy.fp.factor;
 
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.howbuy.fp.utils.ConfContext;
-import com.howbuy.fp.utils.Constants;
-import com.howbuy.fp.utils.PagedResult;
 import com.howbuy.fp.utils.SqlHelper;
 
 

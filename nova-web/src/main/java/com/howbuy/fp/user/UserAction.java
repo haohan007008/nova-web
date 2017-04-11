@@ -15,7 +15,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -77,6 +79,23 @@ public class UserAction {
 		
 		System.out.println(JSON.toJSONString(resp));
         return JSON.toJSONString(resp);
+	}
+	
+	@RequestMapping(value="/user/profile",produces = "application/json; charset=utf-8")
+	public  String profile( HttpServletRequest request , HttpServletResponse response,HttpSession session){
+		RespResult<UserVO> userResp = (RespResult<UserVO>)session.getAttribute("USER_KEY");
+		if (userResp != null) {
+			request.setAttribute("user", userResp.getObj());
+			return "/page/user/profile";
+		}else return "/login";
+	}
+	
+	@RequestMapping(value="/user/edit", method = {RequestMethod.POST }, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public  String editUser(@RequestBody UserVO user, HttpServletRequest request , HttpServletResponse response,HttpSession session){
+		RespResult<String> userResp = userService.updateUserInfo(user);
+		
+		return userResp.toString();
 	}
 	
 	@RequestMapping(value="/user/dologin", produces = "application/json; charset=utf-8")

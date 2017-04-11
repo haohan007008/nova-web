@@ -39,6 +39,12 @@ public class UserService {
 		return resp;
 	}
 	
+	public RespResult<String> updateUserInfo(UserVO user){
+		
+		RespResult<String> resp = userDAO.update(user);
+		return resp;
+	}
+	
 	public void log(int staffId,String action,String ip){
 		userDAO.log(staffId, action, ip);
 	}

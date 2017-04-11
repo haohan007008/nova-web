@@ -1,14 +1,13 @@
 package com.howbuy.fp.order;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
+import com.howbuy.fp.product.Product;
 import com.howbuy.fp.user.UserVO;
 import com.howbuy.fp.utils.Constants;
 import com.howbuy.fp.utils.RespResult;
@@ -34,8 +33,39 @@ public class OrderAction {
 	@Autowired
 	private OrderService orderService;
 	
+	
+	@RequestMapping("/productorders")
+	public  String productorders(HttpServletRequest request,HttpServletResponse response){
+		String prdNo = "";
+	
+		if(request.getParameter("prdNo") != null)
+			prdNo = request.getParameter("prdNo");
+		
+		RespResult<List<Product>> prdResp = orderService.queryProductOrder(prdNo);
+		
+		request.setAttribute("prdNo", prdNo);
+		request.setAttribute("list", prdResp.getObj()); 
+		request.setAttribute("user", getCurrentUser(request,response));
+        return "/page/order/prd_order";
+	}
+	
+	@RequestMapping("/productorders1")
+	public  String productorders1(HttpServletRequest request,HttpServletResponse response){
+		String prdNo = "";
+	
+		if(request.getParameter("prdNo") != null)
+			prdNo = request.getParameter("prdNo");
+		
+		RespResult<List<Product>> prdResp = orderService.queryProductOrder1(prdNo);
+		
+		request.setAttribute("prdNo", prdNo);
+		request.setAttribute("list", prdResp.getObj()); 
+		request.setAttribute("user", getCurrentUser(request,response));
+        return "/page/order/prd_order_store_vw_bk";
+	}
+	
 	@RequestMapping("/orders")
-	public  String orders(HttpServletRequest request){
+	public  String orders(HttpServletRequest request,HttpServletResponse response){
 		String custName = "";
 		int page = 1;
 		int limit = 20;
@@ -55,7 +85,7 @@ public class OrderAction {
 		
 		if(request.getParameter("m") != null && !"".equals(request.getParameter("m"))){
 			String orderClz = request.getParameter("m");
-			staffId = this.getCurrentUser(request).getUserId();
+			staffId = this.getCurrentUser(request,response).getUserId();
 			if(Constants.ORDER_MY_CREATED.equals(orderClz)){
 				//我创建的
 				prdResp = orderService.getOrders(custName,limit*(page-1),limit,staffId);
@@ -82,9 +112,9 @@ public class OrderAction {
 	
 	@RequestMapping(value ="/order/addorder",method = {RequestMethod.POST })
 	@ResponseBody
-	public  String addorder(@RequestBody Order order,HttpServletRequest request){
+	public  String addorder(@RequestBody Order order,HttpServletRequest request,HttpServletResponse response){
 		RespResult<String> respResult = new RespResult<String>();
-		UserVO userVO = getCurrentUser(request);
+		UserVO userVO = getCurrentUser(request,response);
 		if(userVO!= null){
 			order.setStaffId(userVO.getUserId());
 			order.setFlowId(1);
@@ -103,9 +133,9 @@ public class OrderAction {
 	 * */
 	@RequestMapping(value ="/order/auditorder",method = {RequestMethod.POST })
 	@ResponseBody
-	public  String auditorder(@RequestBody Order order,HttpServletRequest request){
+	public  String auditorder(@RequestBody Order order,HttpServletRequest request,HttpServletResponse response){
 		
-		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setStaffId(getCurrentUser(request,response).getUserId());
 		order.setFlowId(1);
 		RespResult<String> respResult = orderService.updateOrder(order);
 		
@@ -118,9 +148,9 @@ public class OrderAction {
 	 * */
 	@RequestMapping(value ="/order/buzaudit",method = {RequestMethod.POST })
 	@ResponseBody
-	public  String buzaudit(@RequestBody Order order,HttpServletRequest request){
+	public  String buzaudit(@RequestBody Order order,HttpServletRequest request,HttpServletResponse response){
 		
-		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setStaffId(getCurrentUser(request,response).getUserId());
 		order.setFlowId(1);
 		order.setCurNodeId(4);
 		RespResult<String> respResult = orderService.buzAduit(order);
@@ -131,9 +161,9 @@ public class OrderAction {
 	
 	@RequestMapping(value ="/order/cancelOrder",method = {RequestMethod.POST })
 	@ResponseBody
-	public  String cancelOrder(@RequestBody Order order,HttpServletRequest request){
+	public  String cancelOrder(@RequestBody Order order,HttpServletRequest request,HttpServletResponse response){
 		
-		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setStaffId(getCurrentUser(request,response).getUserId());
 		order.setFlowId(1);
 		order.setCurNodeId(4);
 		RespResult<String> respResult = orderService.cancelOrder(order);
@@ -147,9 +177,9 @@ public class OrderAction {
 	 * */
 	@RequestMapping(value ="/order/finaudit",method = {RequestMethod.POST })
 	@ResponseBody
-	public  String finaudit(@RequestBody Order order,HttpServletRequest request){
+	public  String finaudit(@RequestBody Order order,HttpServletRequest request,HttpServletResponse response){
 		
-		order.setStaffId(getCurrentUser(request).getUserId());
+		order.setStaffId(getCurrentUser(request,response).getUserId());
 		order.setFlowId(1);
 		order.setCurNodeId(5);
 		RespResult<String> respResult = orderService.finAduit(order);
@@ -160,9 +190,9 @@ public class OrderAction {
 	
 	@RequestMapping(value ="/order/myordercount",method = {RequestMethod.POST })
 	@ResponseBody
-	public  String myordercount(HttpServletRequest request){
+	public  String myordercount(HttpServletRequest request,HttpServletResponse response){
 		
-		UserVO userVO = this.getCurrentUser(request);
+		UserVO userVO = this.getCurrentUser(request,response);
 		
 		int myId  = 0 ;
 		if(userVO  != null )
@@ -175,7 +205,7 @@ public class OrderAction {
 	
 	@RequestMapping(value ="/order/getorder",method = {RequestMethod.GET })
 	//@ResponseBody
-	public  String getorder(HttpServletRequest request){
+	public  String getorder(HttpServletRequest request,HttpServletResponse response){
 		
 		int orderId = 0;
 		if(request.getParameter("rid") != null){
@@ -186,13 +216,14 @@ public class OrderAction {
 		
 		request.setAttribute("order", respResult.getObj());
 		
-		UserVO userVO = this.getCurrentUser(request);
+		UserVO userVO = this.getCurrentUser(request,response);
 		
 		if(userVO == null){
 			request.setAttribute("errorcode", "SessionTimeOut");
 			request.setAttribute("message", "登录信息过期！");
 			return "/page/error";
 		}
+		request.setAttribute("user", getCurrentUser(request,response));
 		if(respResult.getObj().getCurNodeId() ==2 && 
 				userVO.getUserId() == respResult.getObj().getCurOperatorId())
 			return "/page/order/ord_detail"; //主管审核需要修改订单数据挑战到detail
@@ -202,8 +233,19 @@ public class OrderAction {
 		else return "/page/order/ord_vw";
 	}
 	
-	private UserVO getCurrentUser(HttpServletRequest request){
+	private UserVO getCurrentUser(HttpServletRequest request,HttpServletResponse response){
 		RespResult<UserVO> userResp = (RespResult<UserVO>)request.getSession().getAttribute("USER_KEY");
+		if(userResp == null){
+			request.setAttribute("errorcode", "SessionTimeOut");
+			request.setAttribute("message", "登录信息过期！");
+			try {
+				request.getRequestDispatcher("/page/error.jsp").forward(request,response);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return userResp.getObj();
 	}
 	

@@ -27,7 +27,7 @@
 </head>
 <body>
 <div class="pd-20"  style="padding-top:20px;padding-bottom:0px;">
-<p class="f-20 text-success">欢迎使用傲奇服饰订单管理系统 <span class="f-14">v1.0</span>！<span class="r mr-30"> 
+<p class="f-20 text-success">欢迎使用系统 <span class="f-14">v1.0</span>！<span class="r mr-30"> 
 
 			<input type="text" name="prdno" id="prdno" placeholder=" 产品查询" style="width:250px" class="input-text">
 			<button name="prdrearch" id="prdrearch" class="btn btn-success" type="button" onclick="search()">

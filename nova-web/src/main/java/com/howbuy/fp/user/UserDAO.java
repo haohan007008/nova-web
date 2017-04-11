@@ -1,13 +1,9 @@
 package com.howbuy.fp.user;
 
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.howbuy.fp.utils.ConfContext;
 import com.howbuy.fp.utils.Constants;
-import com.howbuy.fp.utils.PagedResult;
+import com.howbuy.fp.utils.RespResult;
 import com.howbuy.fp.utils.SqlHelper;
 
 
@@ -49,6 +45,7 @@ public class UserDAO {
 		if(hst!=null){
 			UserVO userVO = new UserVO();
 			userVO.setUserId(Integer.parseInt(hst.get("Id").toString()));
+			userVO.setUserPwd(pwd);
 			userVO.setUserName(hst.get("name").toString());
 			userVO.setDeptId(Integer.parseInt(hst.get("deptId").toString()));
 			userVO.setTelphone1(hst.get("telphone1").toString());
@@ -126,5 +123,31 @@ public class UserDAO {
 		log.debug("parameters:" + JSON.toJSONString(parameters));
 		
 		this.sqlHelper.executeUpdate(sql, parameters);
+	}
+
+	/**
+	 * update
+	 *
+	 * @param user
+	 * @return 创建时间：2017年4月9日 上午10:48:54
+	 */
+	public RespResult<String> update(UserVO user) {
+		 	RespResult<String> resp = new  RespResult<String>();
+		 	List<Object> parameters = new ArrayList<>();
+			ConfContext context = this.sqlHelper.getSqlContext();
+			String sql = context.getScript("UPDADE_USER_INFO_1");
+			if(!Constants.isBlank(user.getOldPwd())){
+				sql = context.getScript("UPDADE_USER_INFO");
+				parameters.add(user.getUserPwd());
+			}
+			parameters.add(user.getTelphone1());
+			parameters.add(user.getTelphone2());
+			parameters.add(user.getAddress());
+			parameters.add(user.getUserId());
+			if(!Constants.isBlank(user.getOldPwd())){
+				parameters.add(user.getOldPwd());
+			}
+			this.sqlHelper.executeUpdate(sql, parameters);
+		 return resp;
 	}
 }	
