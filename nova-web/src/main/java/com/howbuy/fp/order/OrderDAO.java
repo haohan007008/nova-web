@@ -63,6 +63,7 @@ public class OrderDAO {
 					pItem.setColorNo(ht.get("colorNo").toString());
 					pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
 					pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+					pItem.setPrdingNum((Constants.toDouble(ht.get("prdingNum"))).intValue());
 					pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
 					pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
 					pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
@@ -82,6 +83,7 @@ public class OrderDAO {
 					pItem.setColorNo(ht.get("colorNo").toString());
 					pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
 					pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+					pItem.setPrdingNum((Constants.toDouble(ht.get("prdingNum"))).intValue());
 					pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
 					pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
 					pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
@@ -125,19 +127,20 @@ public class OrderDAO {
 						//pItem.setColorNo(ht.get("colorNo").toString());
 						//pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
 						pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
-						pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
+						//pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
 						pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
 						pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
 						pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
 						pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
 						pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
-						pItem.setNxxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
-						pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
-						pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
-						pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
-						pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
-						pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
-						pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
+						pItem.setIts(ht.get("its").toString());
+						//pItem.setNxxxl((Constants.toDouble(ht.get("nxxXl"))).intValue());
+						//pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
+						//pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
+						//pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
+						//pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
+						//pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
+						//pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
 						prd.getItems().add(pItem);
 					}else{
 						Product pd = new Product();
@@ -153,19 +156,20 @@ public class OrderDAO {
 						//pItem.setColorNo(ht.get("colorNo").toString());
 						//pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
 						pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
-						pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
+						//pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
 						pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
 						pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
 						pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
 						pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
 						pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
-						pItem.setNxxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
-						pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
-						pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
-						pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
-						pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
-						pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
-						pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
+						pItem.setIts(ht.get("its").toString());
+						//pItem.setNxxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+						//pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
+						//pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
+						//pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
+						//pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
+						//pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
+						//pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
 						List<ProductColorItem> items = new ArrayList<>();
 						items.add(pItem);
 						pd.setItems(items);
@@ -181,6 +185,101 @@ public class OrderDAO {
 			return valuesList;
 		}
 	
+		
+		//product_order_query
+	    public List<Product> queryProductOrderbyIts(String its){
+	    		StringBuffer sb =new StringBuffer();
+		    		sb.append("SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.id colorId,");
+		    		sb.append("d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,");
+		    		sb.append("SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl,GROUP_CONCAT(b.id) its");
+		    		sb.append(" FROM r_order a,r_orderitem b,c_product c,c_product_color d");
+		    		sb.append(" WHERE a.id = b.orderId");
+		    		sb.append(" AND b.`prdId` = c.`Id`");
+		    		sb.append(" AND b.`prdColorId` = d.`Id`");
+		    		sb.append(" AND d.`isVaild` = 0");
+		    		sb.append(" AND a.`oprState` = 0");
+		    		sb.append(" AND a.`curNode` = 5");
+		    		sb.append(" AND b.oprState = 0");
+		    		sb.append(" AND b.mntState = 0");
+		    		sb.append(" AND b.`Id` IN ( "+its+" )");
+		    		sb.append(" GROUP BY c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.`colorName`,d.`colorNo`,c.`mtlQty`");
+		    		sb.append(" ORDER BY REPLACE(c.`prdNo`,'16','99') ASC");
+				
+				log.info("sql:"+sb.toString());
+				Map<String, Product> prds = new HashMap<>();
+					
+				List<Hashtable<String, Object>> hst = this.sqlHelper.executeQuery(sb.toString(), null);
+				if(hst != null && hst.size() > 0){
+						for(Hashtable<String, Object> ht : hst){
+							Product prd = prds.get(ht.get("prdNo").toString());
+							if(prd != null ){
+								//已存在对象
+								ProductColorItem pItem = new ProductColorItem();
+								pItem.setId(Constants.toDouble(ht.get("colorId")).intValue());
+								pItem.setPrdId(Constants.toDouble(ht.get("id")).intValue());
+								pItem.setColorName(ht.get("colorName").toString());
+								//pItem.setColorNo(ht.get("colorNo").toString());
+								//pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
+								pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+								//pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
+								pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
+								pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
+								pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
+								pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
+								pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+								pItem.setIts(ht.get("its").toString());
+								//pItem.setNxxxl((Constants.toDouble(ht.get("nxxXl"))).intValue());
+								//pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
+								//pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
+								//pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
+								//pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
+								//pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
+								//pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
+								prd.getItems().add(pItem);
+							}else{
+								Product pd = new Product();
+								pd.setId(Constants.toDouble(ht.get("id")).intValue());	
+								pd.setPrdSmallImg(ht.get("prdSmallImg").toString());
+								pd.setPrdName(ht.get("prdName").toString());
+								pd.setPrdNo(ht.get("prdNo").toString());
+								pd.setMtlQty(ht.get("mtlQty")==null?"":ht.get("mtlQty").toString());
+								
+								ProductColorItem pItem = new ProductColorItem();
+								pItem.setPrdId(Constants.toDouble(ht.get("id")).intValue());
+								pItem.setId(Constants.toDouble(ht.get("colorId")).intValue());
+								pItem.setColorName(ht.get("colorName").toString());
+								//pItem.setColorNo(ht.get("colorNo").toString());
+								//pItem.setSubTotal(Constants.toDouble(ht.get("subTotal")).doubleValue());
+								pItem.setPrdNum((Constants.toDouble(ht.get("prdNum"))).intValue());
+								//pItem.setNxs((Constants.toDouble(ht.get("nxs"))).intValue());
+								pItem.setNs((Constants.toDouble(ht.get("ns"))).intValue());
+								pItem.setNm((Constants.toDouble(ht.get("nm"))).intValue());
+								pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
+								pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
+								pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+								pItem.setIts(ht.get("its").toString());
+								//pItem.setNxxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+								//pItem.setNunno((Constants.toDouble(ht.get("nunno"))).intValue());
+								//pItem.setOns((Constants.toDouble(ht.get("ons"))).intValue());
+								//pItem.setOnm((Constants.toDouble(ht.get("onm"))).intValue());
+								//pItem.setOnl((Constants.toDouble(ht.get("onl"))).intValue());
+								//pItem.setOnxl((Constants.toDouble(ht.get("onxl"))).intValue());
+								//pItem.setOnxxl((Constants.toDouble(ht.get("onxxl"))).intValue());
+								List<ProductColorItem> items = new ArrayList<>();
+								items.add(pItem);
+								pd.setItems(items);
+								
+								prds.put(pd.getPrdNo(), pd);
+							};
+						}
+						
+					}
+					
+					List<Product> valuesList = new ArrayList<Product>(prds.values());
+					Collections.sort(valuesList);
+					return valuesList;
+				}
+		
 	/**
 	 * cancelOrder 取消订单
 	 *

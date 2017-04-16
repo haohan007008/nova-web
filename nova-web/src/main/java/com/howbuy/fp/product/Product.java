@@ -116,6 +116,16 @@ public class Product implements Comparable{
 		return prdNum;
 	}
 	
+	public int getPrdingNumCount(){
+		int prdNum = 0;
+		if(items != null && items.size()>0){
+			for (int i = 0; i < items.size(); i++) {
+				prdNum += items.get(i).getPrdingNum();
+			}
+		}
+		return prdNum;
+	}
+	
 	public double getTotal(){
 		double total = 0;
 		if(items != null && items.size()>0){

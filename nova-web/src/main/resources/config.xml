@@ -5,6 +5,11 @@
 		<variable name="data_page_size">50</variable>
 	</variables>
 	<scripts>
+		<script name="addproductionlog">
+			<![CDATA[
+				insert into r_order_log(orderId,userId,action,remark,flowId)values(?,?,?,?,2)
+			 ]]>
+		</script>
 		<script name="UPDADE_USER_INFO">
 			UPDATE p_staff SET loginPwd =? ,telphone1 =?,telphone2=?,address=? WHERE id=? AND loginPwd = ?
 		</script>
@@ -13,16 +18,32 @@
 		</script>
 		<script name="last_productionId">
 			<![CDATA[
-				select max(id)+1 from m_production
+				SELECT IF(MAX(id) IS NULL,0,MAX(id))+1 FROM m_production
+			 ]]>
+		</script>
+		<script name="update_production_state">
+			<![CDATA[
+				UPDATE m_production SET curNode=? ,curOperatorId=? WHERE id = ?
 			 ]]>
 		</script>
 		<script name="insert_production">
-			INSERT INTO m_production(id,contractNo,manufacturer,signTime,signAddress,prdNum,amount,linkStaff,payBank,payNo,manufacturerAddress,telphone)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+			INSERT INTO m_production(id,contractNo,manufacturer,signTime,signAddress,prdNum,amount,
+			linkStaff,payBank,payNo,manufacturerAddress,telphone,flowId,curNode,curOperatorId,creatorId,status)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 		</script>
 		<script name="insert_productionitem">
-			INSERT INTO m_productionitem(pId,prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,prdNum,amount,remark,deliveryTime,STATUS)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+			INSERT INTO m_productionitem(pId,prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,
+			prdNum,amount,remark,deliveryTime,STATUS,price)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		</script>
+		<script name="update_productionitem">
+			UPDATE m_productionitem t SET t.amount =t.price*t.prdNum WHERE t.pId = ?
+		</script>
+		<script name="update_production">
+			UPDATE m_production t 
+			SET t.prdnum = (SELECT SUM(ti.`prdNum`)FROM m_productionitem ti WHERE ti.`pId` = t.id),
+			    t.amount = (SELECT SUM(ti.`amount`) FROM m_productionitem ti WHERE ti.`pId` = t.id)
+			WHERE t.id = ?
 		</script>
 		<script name="query_production">
 			SELECT a.*,c.`name` curOperatorName,b.name creatorName,d.`nodeName` 
@@ -30,6 +51,12 @@
 			LEFT JOIN p_staff b ON a.`creatorId` = b.id
 			LEFT JOIN p_staff c ON a.`curOperatorId` = c.`Id`
 			LEFT JOIN f_flownode d ON a.`flowId` = a.`flowId` AND a.`curNode` = d.`Id`
+			where 1=1 
+		</script>
+		<script name="queryProductionById">
+			SELECT c.`prdNo`,c.`prdSmallImg`,c.`mtlQty`,d.`colorName`,a.* 
+			FROM m_productionitem a,c_product c,c_product_color d WHERE a.pid = ?
+				AND a.prdId = c.id AND d.`Id` = a.prdColorId 
 		</script>
 		<script name="query_production_count">
 			SELECT count(1) 
@@ -37,6 +64,7 @@
 			LEFT JOIN p_staff b ON a.`creatorId` = b.id
 			LEFT JOIN p_staff c ON a.`curOperatorId` = c.`Id`
 			LEFT JOIN f_flownode d ON a.`flowId` = a.`flowId` AND a.`curNode` = d.`Id`
+			where 1=1
 		</script>
 		<script name="in_store">
 			INSERT INTO T_STORE(prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,nunno)
@@ -55,7 +83,8 @@
 		</script>
 		<script name="product_order_query">
 			SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,
-			d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,
+			d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,
+			SUM(IF(b.mntState=0,0,b.`prdNum`)) prdingNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,
 			SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl
 			FROM r_order a,r_orderitem b,c_product c,c_product_color d
 			WHERE a.id = b.orderId
@@ -88,9 +117,9 @@
 			ORDER BY REPLACE(r.`prdNo`,'16','99') ASC
 		</script>
 		<script name="product_order_store_query">
-			SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,
+			SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.id colorId,
 			d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,
-			SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl
+			SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl,GROUP_CONCAT(b.id) its
 			FROM r_order a,r_orderitem b,c_product c,c_product_color d
 			WHERE a.id = b.orderId
 			AND b.`prdId` = c.`Id`
@@ -101,6 +130,24 @@
 			AND b.oprState = 0
 			and b.mntState = 0
 			AND c.prdNo LIKE ?
+			GROUP BY c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.`colorName`,d.`colorNo`,c.`mtlQty`
+			ORDER BY REPLACE(c.`prdNo`,'16','99') ASC
+		</script>
+		
+		<script name="product_order_by_its">
+			SELECT c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.id colorId,
+			d.`colorName`,d.`colorNo`,c.`mtlQty`,SUM(b.`prdNum`) prdNum,SUM(b.`subTotal`) subTotal,SUM(b.`ns`) ns,
+			SUM(b.`nm`) nm,SUM(b.`nl`) nl,SUM(b.`nxl`) nxl,SUM(b.`nxxl`) nxxl,GROUP_CONCAT(b.id) its
+			FROM r_order a,r_orderitem b,c_product c,c_product_color d
+			WHERE a.id = b.orderId
+			AND b.`prdId` = c.`Id`
+			AND b.`prdColorId` = d.`Id`
+			AND d.`isVaild` = 0
+			AND a.`oprState` = 0
+			AND a.`curNode` = 5
+			AND b.oprState = 0
+			AND b.mntState = 0
+			AND b.`Id` IN ( ? )
 			GROUP BY c.id,c.`prdNo`,c.`prdSmallImg`,c.`prdName`,d.`colorName`,d.`colorNo`,c.`mtlQty`
 			ORDER BY REPLACE(c.`prdNo`,'16','99') ASC
 		</script>
@@ -198,8 +245,18 @@
 				select l.*,n.nodeName,f.name userName from r_order_log l,f_flownode n ,p_staff f
 				where l.orderId = ? and l.action = n.id
 				and f.id = l.userId
+				and l.flowId =1
 				order by timestamp asc
-
+			 ]]>
+		</script>
+		
+		<script name="getproductionlog">
+			<![CDATA[
+				select l.*,n.nodeName,f.name userName from r_order_log l,f_flownode n ,p_staff f
+				where l.orderId = ? and l.action = n.id
+				and f.id = l.userId
+				and l.flowId =2
+				order by timestamp asc
 			 ]]>
 		</script>
 		<script name="addorderlog">
@@ -211,6 +268,12 @@
 			<![CDATA[
 				select  MAX(r.name) orderno
 					 from r_order r where DATE_FORMAT(r.`timestamp`,'%Y%m%d') = date_format(now(),'%Y%m%d')
+			 ]]>
+		</script>
+		<script name="getcontractNo">
+			<![CDATA[
+				select  MAX(r.contractNo) contractNo
+					 from m_production r where DATE_FORMAT(r.`timestamp`,'%Y%m%d') = date_format(now(),'%Y%m%d')
 			 ]]>
 		</script>
 		<script name="canelOrder">

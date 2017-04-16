@@ -3,6 +3,7 @@ package com.howbuy.fp.utils;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,7 +22,15 @@ public class Constants {
 	public final static String ORDER_MY_HANDED = "2";
 	public final static String ORDER_MY_CREATED = "3";
 	
-	
+	public static String getAfter3MDate(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  
+		Date date = new Date();//获取当前时间    
+		Calendar calendar = Calendar.getInstance();    
+		calendar.setTime(date);    
+		calendar.add(Calendar.MONTH, 3);//当前时间前去一个月，即一个月前的时间    
+		;//获取一年前的时间，或者一个月前的时间    
+		return sdf.format(calendar.getTime());
+	}
 	
 	public static String lpad(String str,int num,String pad){  
 	    String n_str=str;  

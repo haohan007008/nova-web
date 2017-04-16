@@ -1,0 +1,170 @@
+2017-03-20 15:11:25 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:11:25 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:11:26 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:11:30 [org.activiti.engine.impl.db.DbSqlSession]-[INFO] performing create on engine with resource org/activiti/db/create/activiti.mysql.create.engine.sql
+2017-03-20 15:11:30 [org.activiti.engine.impl.db.DbSqlSession]-[INFO] Found MySQL: majorVersion=5 minorVersion=7
+2017-03-20 15:12:16 [org.activiti.engine.impl.db.DbSqlSession]-[INFO] performing create on history with resource org/activiti/db/create/activiti.mysql.create.history.sql
+2017-03-20 15:12:16 [org.activiti.engine.impl.db.DbSqlSession]-[INFO] Found MySQL: majorVersion=5 minorVersion=7
+2017-03-20 15:12:31 [org.activiti.engine.impl.db.DbSqlSession]-[INFO] performing create on identity with resource org/activiti/db/create/activiti.mysql.create.identity.sql
+2017-03-20 15:12:31 [org.activiti.engine.impl.db.DbSqlSession]-[INFO] Found MySQL: majorVersion=5 minorVersion=7
+2017-03-20 15:12:37 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:12:37 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:12:37 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 15:12:37 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 15:22:06 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:22:06 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:22:06 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:22:10 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:22:10 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:22:10 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 15:22:10 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 15:22:11 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 15:22:11 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 15:38:37 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:38:37 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:38:38 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:38:43 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:38:43 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:40:23 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:40:23 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:40:23 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:40:27 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:40:27 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:40:27 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 15:40:27 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 15:40:59 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:40:59 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:40:59 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:41:03 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:41:03 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:41:26 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:41:26 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:41:26 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:41:29 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:41:29 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:41:54 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:41:54 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:41:54 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:41:57 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:41:57 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 15:41:57 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 15:41:57 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 15:42:05 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 15:42:05 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 15:42:06 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 15:42:09 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 15:42:09 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:12:50 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:12:50 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:12:50 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:12:56 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:12:56 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:12:56 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 16:12:56 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 16:15:29 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:15:29 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:15:29 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:15:33 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:15:33 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:15:42 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:15:42 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:15:42 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:15:46 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:15:46 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:15:46 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 16:15:46 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 16:16:02 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:16:02 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:16:03 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:16:06 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:16:06 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:16:20 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:16:20 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:16:21 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:16:24 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:16:24 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:16:24 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 16:16:24 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 16:44:54 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:44:54 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:44:54 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:44:58 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:44:58 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:44:58 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 16:44:58 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 16:45:46 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:45:46 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:45:47 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:45:50 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:45:50 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:46:46 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:46:46 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:46:46 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:46:50 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:46:50 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:46:50 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 16:46:50 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 16:47:39 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:47:39 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:47:40 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:47:43 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:47:43 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:48:14 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 16:48:14 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 16:48:14 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 16:48:17 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 16:48:17 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 16:48:17 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 16:48:17 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn
+2017-03-20 17:05:14 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:05:15 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:05:15 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:05:21 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:05:21 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:09:42 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:09:42 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:09:42 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:09:46 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:09:46 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:10:26 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:10:26 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:10:26 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:10:30 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:10:30 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:11:18 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:11:18 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:11:18 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:11:23 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:11:23 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:11:37 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:11:37 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:11:37 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:11:42 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:11:42 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:28:48 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:28:48 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:28:49 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:28:55 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:28:55 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:29:31 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:29:31 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:29:32 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:29:35 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:29:35 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:32:06 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:32:06 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:32:06 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:32:09 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:32:10 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:40:50 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:40:50 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:40:51 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:40:55 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:40:55 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:56:26 [org.activiti.engine.ProcessEngines]-[INFO] Initializing process engine using configuration 'file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml'
+2017-03-20 17:56:26 [org.activiti.engine.ProcessEngines]-[INFO] initializing process engine for resource file:/C:/Users/Administrator/git/nova-web/nova-web/target/classes/activiti.cfg.xml
+2017-03-20 17:56:27 [org.springframework.beans.factory.xml.XmlBeanDefinitionReader]-[INFO] Loading XML bean definitions from resource loaded through InputStream
+2017-03-20 17:56:34 [org.activiti.engine.impl.ProcessEngineImpl]-[INFO] ProcessEngine default created
+2017-03-20 17:56:34 [org.activiti.engine.ProcessEngines]-[INFO] initialised process engine default
+2017-03-20 17:56:34 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.png
+2017-03-20 17:56:34 [org.activiti.engine.impl.bpmn.deployer.BpmnDeployer]-[INFO] Processing resource hello.bpmn

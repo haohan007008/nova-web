@@ -182,4 +182,17 @@ public class OrderService {
 		resp.setObj(hst);
 		return resp;
 	}
+
+	/**
+	 * queryProductOrderbyIts
+	 *
+	 * @param its
+	 * @return 创建时间：2017年4月12日 上午9:39:17
+	 */
+	public RespResult<List<Product>> queryProductOrderbyIts(String its) {
+		RespResult<List<Product>> resp = new RespResult<>();
+		List<Product> hst = orderDAO.queryProductOrderbyIts(its);
+		resp.setObj(hst);
+		return resp;
+	}
 }

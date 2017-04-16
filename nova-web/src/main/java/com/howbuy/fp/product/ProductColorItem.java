@@ -17,6 +17,16 @@ public class ProductColorItem {
 	private int nxxxl = 0;
 	private int ons = 0;
 	private int nunno = 0;
+	private String its;
+	
+	public String getIts() {
+		return its;
+	}
+
+	public void setIts(String its) {
+		this.its = its;
+	}
+
 	public int getNunno() {
 		return nunno;
 	}
@@ -89,6 +99,15 @@ public class ProductColorItem {
 	private int onxxxl = 0;
 	private int status;
 	private int prdNum = 0;
+	private int prdingNum = 0;
+	public int getPrdingNum() {
+		return prdingNum;
+	}
+
+	public void setPrdingNum(int prdingNum) {
+		this.prdingNum = prdingNum;
+	}
+
 	private String deliveryTime;
 	
 	
