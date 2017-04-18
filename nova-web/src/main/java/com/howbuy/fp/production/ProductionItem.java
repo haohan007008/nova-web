@@ -28,6 +28,13 @@ public class ProductionItem extends ProductItem{
 	}
 	private double amount;
 	private double price;
+	private String its;
+	public String getIts() {
+		return its;
+	}
+	public void setIts(String its) {
+		this.its = its;
+	}
 	public double getPrice() {
 		return price;
 	}

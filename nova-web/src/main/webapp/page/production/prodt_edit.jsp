@@ -21,11 +21,11 @@
 <script type="text/javascript" src="lib/respond.min.js"></script>
 <script type="text/javascript" src="lib/PIE_IE678.js"></script>
 <![endif]-->
-<link href="css/H-ui.min.css" rel="stylesheet" type="text/css" />
-<link href="css/H-ui.admin.css" rel="stylesheet" type="text/css" />
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<link href="lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link href="../css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="../css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<link href="../lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="../lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
 <!--[if IE 6]>
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
@@ -48,7 +48,7 @@
 		<span class="l">生产总数：<strong id="l_total_cnt">0</strong> 件，合计金额：<strong id="l_total_m" class="c-red">0</strong>元</span></span> </div>
 		
 		<div class="row cl mt-20">
-					<input type="hidden" id="its" value="${its}">
+					<input type="hidden" id="its" value="">
 					<input type="hidden" id="id" value="<%=production.getId() %>">
 					<label class="form-label col-1 text-r"><span class="c-red">*</span>委托方名称：</label>
 					<div class="formControls col-5">
@@ -56,7 +56,7 @@
 					</div>
 					<label class="form-label col-1 text-r"><span class="c-red">*</span>是否含税：</label>
 					<div class="formControls col-5">
-						<input type="checkbox" id="tax" name="tax">
+						<input type="checkbox" id="tax" name="tax" <c:if test="${production.tax}">checked</c:if>>
 					</div>
 				</div>
 		
@@ -106,7 +106,7 @@
 							<td rowspan="<%=itemSize %>"><a onClick="" href="javascript:;"><img width="60"  height="60" class="product-thumb" src="/nova-web/<%=product.getPrdSmallImg() %>"></a></td>
 							<td rowspan="<%=itemSize %>"><%=product.getMtlQty() %></td>
 							<%} %>
-							<td><%=pItem.getColorName() %><input type="hidden" value="<%=product.getId() %>"><input type="hidden" value="<%=pItem.getId() %>"><input type="hidden" value="<%=pItem.getIts() %>"></td>
+							<td><%=pItem.getColorName() %><input type="hidden" value="<%=product.getId() %>"><input type="hidden" value="<%=pItem.getId() %>"><input id="i_<%=product.getId() %>_<%=pItem.getId() %>" type="hidden" value="<%=pItem.getIts() %>"></td>
 							<td><%=pItem.getNs() %></td>
 							<td><%=pItem.getNm() %></td>
 							<td><%=pItem.getNl() %></td>
@@ -183,13 +183,13 @@
 				</div>
 	</div>
 </div>
-<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
-<script type="text/javascript" src="lib/layer/1.9.3/layer.js"></script>
-<script type="text/javascript" src="lib/My97DatePicker/WdatePicker.js"></script> 
-<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
-<script type="text/javascript" src="lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script> 
-<script type="text/javascript" src="js/H-ui.js"></script> 
-<script type="text/javascript" src="js/H-ui.admin.js"></script> 
+<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="../lib/layer/1.9.3/layer.js"></script>
+<script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="../lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="../lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script> 
+<script type="text/javascript" src="../js/H-ui.js"></script> 
+<script type="text/javascript" src="../js/H-ui.admin.js"></script> 
 <script type="text/javascript">
 Array.prototype.unique3 = function(){
 	 var res = [];
@@ -222,6 +222,9 @@ function del_tr(prdId,colorId){
 }
 function delOnView(prdId,colorId){	  
 	  //$(obj).parent().parent();.remove();
+	  //alert($("#its").val()+"_"+$("#i_"+prdId+"_"+colorId).val());
+	  
+	  
 	  var tds = $("#p_"+prdId+"_"+colorId).find('td');
 	  
 	  if(tds[0].rowSpan && tds[0].rowSpan > 1){
@@ -242,6 +245,7 @@ function delOnView(prdId,colorId){
 		  //tds[3].rowSpan = tds[3].rowSpan -1;
 	  }
 	  $("#p_"+prdId+"_"+colorId).remove();
+	  
 	  //refresh_table();
 }
 
@@ -256,7 +260,7 @@ function selectHotelChrome(option){//为打开的窗口定义方法，让打开�
 		$('#its').val($('#its').val()+','+option);
 	else $('#its').val(option);
 	var it = $('#its').val().split(',').unique3().join(',');
-	alert(it);
+	//alert(it);
 	location.replace('productionitems.do?its='+it);
 }  
 
@@ -277,7 +281,7 @@ function order(nextAction){
 	if(order){
 		$.ajax({ 
 	        type:"POST", 
-	        url:"production/add.do?dt="+new Date(), 
+	        url:"add.do?dt="+new Date(), 
 	        dataType:"json",      
 	        contentType:"application/json",               
 	        data:JSON.stringify(order), 
@@ -285,8 +289,7 @@ function order(nextAction){
 	        	if(data.success){
 	        		layer.msg('生产计划安排成功！',{icon:1,time:2000}); 
 	        		//var t=window.parent; 
-	        		
-	        		//location.replace(location.href);
+	        		location.replace('getprodt.do?rid='+data.obj);
 	        	}else 
 	        		layer.msg('生产计划安排失败！请联系管理员！-'+data.desc,{icon:2,time:2000}); 
 	        } 
@@ -300,7 +303,7 @@ function getDataSet(){
 	
 	var production ={};
 	production.manufacturer = $('#manufacturer').val();
-	production.tax = $('#tax').val();
+	production.tax = $('#tax').get(0).checked;
 	production.payBank = $('#payBank').val();
 	production.payNo = $('#payNo').val();
 	production.linkStaff = $('#linkStaff').val();
@@ -308,7 +311,7 @@ function getDataSet(){
 	production.manufacturerAddress = $('#manufacturerAddress').val();
 	production.remark = $('#remark').val();
 	production.its = $('#its').val();
-	
+	production.id = $('#id').val();
 	var data = [];
 	var cnt = 0;
 	for(var i=0;i<trs.length;i++){
@@ -346,6 +349,7 @@ function getDataSet(){
 function refresh_table(){
 	var trs = $("#mycart > tbody").find('tr');
 	var data = [];
+	var its = '-1';
 	var cnt = 0,totalMoney=0;
 	for(var i=0;i<trs.length;i++){
 		var tds = trs[i].children;
@@ -368,6 +372,8 @@ function refresh_table(){
 		cnt += tds[6+l].innerHTML *1;
 		totalMoney += tds[8+l].innerHTML*1;
 		
+		its += ',' + tds[0+l].children[2].value;
+		
 		//if(cnt > 0 )
 		//	data[data.length] = rd;
 	}
@@ -375,6 +381,8 @@ function refresh_table(){
 	$('#total_m').html(totalMoney);
 	$('#l_total_cnt').html(cnt);
 	$('#l_total_m').html(totalMoney);
+	
+	$('#its').val(its)
 	//alert(JSON.stringify(data));
 	//return data;
 }

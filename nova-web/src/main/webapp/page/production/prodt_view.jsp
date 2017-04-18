@@ -44,13 +44,32 @@
 		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
 		<span class="r"> 
 		<a href="javascript:;" onclick="order('PASS')" class="btn btn-success radius">
-		<i class="Hui-iconfont">&#xe672;</i> 审核完成</a> 
+		<i class="Hui-iconfont">&#xe672;</i> 审核通过</a> 
 		<a href="javascript:;" onclick="order('REJECT')" class="btn btn-danger radius">
-		<i class="Hui-iconfont">&#xe672;</i> 驳回调整</a> 
+		<i class="Hui-iconfont">&#xe672;</i> 审核不通过</a> 
 		</span> 
 		<span class="l">生产总数：<strong id="l_total_cnt"><%=production.getPrdNum() %></strong> 件，合计金额：
 		<strong id="l_total_m" class="c-red"><%=production.getAmount() %></strong>元</span></span> </div>
-		
+		<div class="row cl mt-20">
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>合同号：</label>
+					<div class="formControls col-4">
+						${production.contractNo }
+					</div>
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>当前环节：</label>
+					<div class="formControls col-4">
+						${production.curNodeName }
+					</div>
+				</div>
+		<div class="row cl mt-20">
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>创建人：</label>
+					<div class="formControls col-4">
+						${production.creatorName }
+					</div>
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>当前处理人：</label>
+					<div class="formControls col-4">
+						${production.curOperatorName }
+					</div>
+				</div>
 		<div class="row cl mt-20">
 					<input type="hidden" id="its" value="${its}">
 					<input type="hidden" id="id" value="<%=production.getId() %>">
@@ -60,10 +79,35 @@
 					</div>
 					<label class="form-label col-2 text-r"><span class="c-red">*</span>是否含税：</label>
 					<div class="formControls col-4">
-						<input type="checkbox" id="tax" name="tax">
+						<input type="checkbox" id="tax" name="tax" <c:if test="${production.tax}">checked</c:if>>
 					</div>
 				</div>
-		
+		<div class="row cl mt-20">
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>开户银行：</label>
+					<div class="formControls col-4">
+						${production.payBank }
+					</div>
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>付款账户：</label>
+					<div class="formControls col-4">
+						${production.payNo }
+					</div>
+				</div>
+		<div class="row cl mt-20">
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>联系人：</label>
+					<div class="formControls col-4">
+						${production.linkStaff }
+					</div>
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>联系电话：</label>
+					<div class="formControls col-4">
+						${production.telphone }
+					</div>
+				</div>
+		<div class="row cl mt-20">
+					<label class="form-label col-2 text-r"><span class="c-red">*</span>工厂地址：</label>
+					<div class="formControls col-10">
+						${production.manufacturerAddress }
+					</div>
+				</div>
 		<div class="mt-20">
 			<table class="table table-border table-bordered table-bg table-hover table-sort" id="mycart">
 				<thead>
@@ -87,6 +131,8 @@
 				</thead>
 				<tbody>
 					<%
+					    int s_cnt=0,m_cnt=0,l_cnt =0,xl_cnt=0,xxl_cnt=0,prdNum=0,prdingNum=0;
+						double total=0;
 						List<Product> products = production.getProducts();
 						if(products == null || products.size() <= 0){
 					%>
@@ -100,6 +146,14 @@
 								int itemSize = product.getItems().size();
 								for(int j=0; j< itemSize ;j++){
 									ProductColorItem pItem = (ProductColorItem)product.getItems().get(j);
+									s_cnt += pItem.getNs();
+									m_cnt += pItem.getNm();
+									l_cnt += pItem.getNl();
+									xl_cnt += pItem.getNxl();
+									xxl_cnt += pItem.getNxxl();
+									prdNum += pItem.getPrdNum();
+									//prdNum += pItem.getPrdNum();
+									total+=pItem.getSubTotal();
 									
 					  %>
 						<tr class="text-c va-m" id="p_<%=product.getId() %>_<%=pItem.getId() %>" >
@@ -139,48 +193,22 @@
 						<th>合计</th>
 						<th></th>
 						
-						<th id="cnt_s"></th>
-						<th id="cnt_m"></th>
-						<th id="cnt_l"></th>
-						<th id="cnt_xl"></th>
-						<th id="cnt_xxl"></th>
-						<th id="total_cnt"></th>
+						<th id="cnt_s"><%=s_cnt %></th>
+						<th id="cnt_m"><%=m_cnt %></th>
+						<th id="cnt_l"><%=l_cnt %></th>
+						<th id="cnt_xl"><%=xl_cnt %></th>
+						<th id="cnt_xxl"><%=xxl_cnt %></th>
+						<th id="total_cnt"><%=prdNum %></th>
 						<th></th>
-						<th id="total_m"></th>
+						<th id="total_m"><span class="price c-red" id="total_m"><%=total %></span></th>
 						<th></th>
-						<th><span class="price c-red" id="total_m"></span></th>
+						<th></th>
 						<th></th>
 					</tr>
 				</tfoot>
 				</tbody>
 			</table>
 		</div>
-		<div class="row cl mt-20">
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>开户银行：</label>
-					<div class="formControls col-4">
-						${production.payBank }
-					</div>
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>付款账户：</label>
-					<div class="formControls col-4">
-						${production.payNo }
-					</div>
-				</div>
-		<div class="row cl mt-20">
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>联系人：</label>
-					<div class="formControls col-4">
-						${production.linkStaff }
-					</div>
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>联系电话：</label>
-					<div class="formControls col-4">
-						${production.telphone }
-					</div>
-				</div>
-		<div class="row cl mt-20">
-					<label class="form-label col-2 text-r"><span class="c-red">*</span>工厂地址：</label>
-					<div class="formControls col-10">
-						${production.manufacturerAddress }
-					</div>
-				</div>
 		
 		<%
 		

@@ -110,14 +110,27 @@ public class ProductionService {
 		RespResult<String> resp = new RespResult<String>();
 		if("PASS".equals(production.getAction())){
 			this.log(production.getId(), production.getCurOperatorId(),
-					String.valueOf(production.getCurNode()), production.getRemark());
+					String.valueOf(production.getCurNode()), "经理审批通过！"+production.getRemark());
 			production.setCurNode(9);
 			resp = productionDAO.updateProductionState(production);
 		}else if("REJECT".equals(production.getAction())){
+			this.log(production.getId(), production.getCurOperatorId(),
+					String.valueOf(production.getCurNode()), "经理审批未通过！"+production.getRemark());
 			production.setCurNode(8);
 			//production.setCurOperatorId();
 			resp = productionDAO.updateProductionState(production);
 		}
 		return resp;
+	}
+
+	/**
+	 * editProduction
+	 *
+	 * @param production
+	 * @return 创建时间：2017年4月17日 下午4:17:46
+	 */
+	public RespResult<String> editProduction(Production production) {
+		
+		return productionDAO.editProduction(production);
 	}
 }

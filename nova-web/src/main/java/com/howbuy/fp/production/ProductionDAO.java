@@ -84,6 +84,7 @@ public class ProductionDAO {
 				prod.setTelphone(nvl(ht.get("telphone").toString()));
 				prod.setCurNodeName(ht.get("nodeName")== null?"":ht.get("nodeName").toString());
 				prod.setCurNode((Constants.toDouble(ht.get("curNode"))).intValue());
+				prod.setTax((Constants.toDouble(ht.get("tax"))).intValue() == 0?true:false);
 //				pItem.setPrdNo(ht.get("prdNo").toString());
 //				pItem.setPrdId(Constants.toDouble(ht.get("prdColorId")).intValue());
 //				pItem.setColorName(ht.get("colorName").toString());
@@ -174,6 +175,9 @@ public class ProductionDAO {
 		parameters.add(this.getNextOperator(2, 14,lastId)); //curOperator
 		parameters.add(production.getCreatorId());
 		parameters.add(production.getStatus());
+		//arameters.add(production.getTax());
+		parameters.add(production.getTax()?0:1);
+		
 		log.debug("parameters:" + JSON.toJSONString(parameters));
 		
 		int effect = this.sqlHelper.executeUpdate(sql, parameters);
@@ -205,6 +209,7 @@ public class ProductionDAO {
 					p.add(item.getDeliveryTime());
 					p.add(item.getStatus());
 					p.add(item.getPrice());
+					p.add(item.getIts());
 					params.add(p);
 				}
 				
@@ -272,6 +277,7 @@ public class ProductionDAO {
 					pItem.setNl((Constants.toDouble(ht.get("nl"))).intValue());
 					pItem.setNxl((Constants.toDouble(ht.get("nxl"))).intValue());
 					pItem.setNxxl((Constants.toDouble(ht.get("nxxl"))).intValue());
+					pItem.setIts(ht.get("its").toString());
 					prd.getItems().add(pItem);
 				}else{
 					Product pd = new Product();
@@ -294,6 +300,7 @@ public class ProductionDAO {
 					pItem.setPrice(Constants.toDouble(ht.get("price")).doubleValue());
 					pItem.setDeliveryTime(ht.get("deliveryTime").toString());
 					pItem.setRemark(ht.get("remark").toString());
+					pItem.setIts(ht.get("its").toString());
 					List<ProductColorItem> items = new ArrayList<>();
 					items.add(pItem);
 					pd.setItems(items);
@@ -417,5 +424,106 @@ public class ProductionDAO {
 		production.setCurOperatorId(this.getNextOperator(2, production.getCurNode(), production.getId()));
 		return this.updateProduction(production);
 		//return null;
+	}
+
+	/**
+	 * editProduction
+	 *
+	 * @param production
+	 * @return 创建时间：2017年4月17日 下午4:18:21
+	 */
+	public RespResult<String> editProduction(Production production) {
+		RespResult<String> resp = new RespResult<String>();
+		List<Object> parameters = new ArrayList<>();
+		//int lastId = -1;
+		ConfContext context = this.sqlHelper.getSqlContext();
+		String sql = context.getScript("edit_production");
+		//contractNo,manufacturer,signTime,signAddress,prdNum,amount,linkStaff,payBank,payNo,
+		//manufacturerAddress,telphone ,flowId,curNode,curOperatorId,creatorId,STATUS
+		
+		//lastId = this.newProductionId();
+		//parameters.add(lastId);
+		//parameters.add(production.getContractNo());
+		parameters.add(production.getManufacturer());
+		parameters.add(production.getSignTime());
+		parameters.add(production.getSignAddress());
+		parameters.add(production.getPrdNum());
+		parameters.add(production.getAmount()); 
+		parameters.add(production.getLinkStaff());  
+		parameters.add(production.getPayBank());  
+		parameters.add(production.getPayNo());
+		parameters.add(production.getManufacturerAddress());
+		parameters.add(production.getTelphone());
+		parameters.add(production.getFlowId());
+		parameters.add(14);
+		parameters.add(this.getNextOperator(2, 14,production.getId())); //curOperator
+		parameters.add(production.getCreatorId());
+		parameters.add(production.getStatus());
+		//arameters.add(production.getTax());
+		parameters.add(production.getTax()?0:1);
+		
+		parameters.add(production.getId());
+		log.debug("parameters:" + JSON.toJSONString(parameters));
+		
+		this.sqlHelper.executeUpdate(context.getScript("back_productionitem"), new ArrayList<Object>(Arrays.asList(production.getId())));
+		this.sqlHelper.executeUpdate(context.getScript("back_edit_production_order"), new ArrayList<Object>(Arrays.asList(production.getId())));
+		
+		int effect = this.sqlHelper.executeUpdate(sql, parameters);
+		//log.info("effect:" + effect);
+		
+		if(effect >= 0 && production.getItems() != null 
+				&& production.getItems().size() > 0){
+			try {
+				//lastId = Integer.parseInt(this.sqlHelper.query4OneVal(context.getScript("lastId"), null));
+				//log.info("lastId:" + lastId);
+				List<List<Object>> params = new ArrayList<>();
+				for (int i = 0; i < production.getItems().size(); i++) {
+					List<Object> p = new ArrayList<>();
+					ProductionItem item = production.getItems().get(i);
+					//pId,prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,prdNum,amount,remark,deliveryTime,STATUS
+					p.add(production.getId());
+					p.add(item.getPrdId());
+					p.add(item.getPrdColorId());
+					p.add(item.getNxs());
+					p.add(item.getNs());
+					p.add(item.getNm());
+					p.add(item.getNl());
+					p.add(item.getNxl());
+					p.add(item.getNxxl());
+					p.add(item.getNxxxl());
+					p.add(item.getPrdNum());
+					p.add(item.getAmount());
+					p.add(item.getRemark());
+					p.add(item.getDeliveryTime());
+					p.add(item.getStatus());
+					p.add(item.getPrice());
+					p.add(item.getIts());
+					params.add(p);
+				}
+				
+				this.sqlHelper.executeBatch(context.getScript("insert_productionitem"), params, "");
+				
+				this.sqlHelper.executeUpdate(context.getScript("update_productionitem"), new ArrayList<Object>(Arrays.asList(production.getId())));
+				this.sqlHelper.executeUpdate(context.getScript("update_production"), new ArrayList<Object>(Arrays.asList(production.getId())));
+				this.sqlHelper.executeUpdate("UPDATE r_orderitem i SET i.mntstate = "+
+						production.getId()+" WHERE i.id IN ("+production.getIts()+");", null);
+				//this.sqlHelper.executeUpdate(context.getScript("updateorderitems2"), new ArrayList<Object>(Arrays.asList(lastId)));
+				//this.sqlHelper.executeUpdate(context.getScript("updateorder"), new ArrayList<Object>(Arrays.asList(lastId)));
+				//this.addorderlog(lastId, order.getStaffId(), "1", order.getRemark());
+				this.addorderlog(production.getId(), production.getCreatorId(), "8",production.getRemark());
+				resp.setObj(String.valueOf(production.getId()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				//this.sqlHelper.executeUpdate(context.getScript("deleteorderitem"), new ArrayList<Object>(Arrays.asList(lastId)));
+				//this.sqlHelper.executeUpdate(context.getScript("deleteorder"), new ArrayList<Object>(Arrays.asList(lastId)));
+				resp.setSuccess(false);
+				resp.setDesc(e.getMessage());
+			}
+		}else {
+			resp.setSuccess(false);
+			resp.setDesc("edit Production error , [Production.getItems] is null or effect < 0 ,"
+					+ " please contact system administrator !");
+		}
+		return resp;
 	}
 }

@@ -76,8 +76,9 @@ public class ProductionAction {
 		if(userVO!= null){
 			production.setCreatorId(userVO.getUserId());
 			production.setFlowId(2);
-			
-			respResult = productionService.addProduction(production);
+			if(production.getId() == 0)
+				respResult = productionService.addProduction(production);
+			else respResult = productionService.editProduction(production);
 			//if(respResult.isSuccess())
 			//	request.getSession().removeAttribute("mycart");
 		}else {

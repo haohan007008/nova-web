@@ -28,13 +28,24 @@
 		</script>
 		<script name="insert_production">
 			INSERT INTO m_production(id,contractNo,manufacturer,signTime,signAddress,prdNum,amount,
-			linkStaff,payBank,payNo,manufacturerAddress,telphone,flowId,curNode,curOperatorId,creatorId,status)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+			linkStaff,payBank,payNo,manufacturerAddress,telphone,flowId,curNode,curOperatorId,creatorId,status,tax)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+		</script>
+		<script name="edit_production">
+			UPDATE m_production p SET p.manufacturer=?,p.signTime=?,p.signAddress=?,p.prdNum=?,p.amount=?,
+			p.linkStaff=?,p.payBank=?,p.payNo=?,p.manufacturerAddress=?,p.telphone=?,p.flowId=?,
+			p.curNode=?,p.curOperatorId=?,p.creatorId=?,p.STATUS=?,p.tax=? WHERE id = ?
+		</script>
+		<script name="back_productionitem">
+			update m_productionitem SET status = 9 WHERE pId = ? 
+		</script>
+		<script name="back_edit_production_order">
+			UPDATE r_orderitem SET mntstate = 0 WHERE mntState = ?
 		</script>
 		<script name="insert_productionitem">
 			INSERT INTO m_productionitem(pId,prdId,prdColorId,nxs,ns,nm,nl,nxl,nxxl,nxxxl,
-			prdNum,amount,remark,deliveryTime,STATUS,price)
-			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+			prdNum,amount,remark,deliveryTime,STATUS,price,its)
+			VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 		</script>
 		<script name="update_productionitem">
 			UPDATE m_productionitem t SET t.amount =t.price*t.prdNum WHERE t.pId = ?

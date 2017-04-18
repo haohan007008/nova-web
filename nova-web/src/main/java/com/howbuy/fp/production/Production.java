@@ -34,6 +34,14 @@ public class Production {
 	private List<Product> products;
 	private String remark;
 	private String action;
+	private Boolean tax;
+	
+	public Boolean getTax() {
+		return tax;
+	}
+	public void setTax(Boolean tax) {
+		this.tax = tax;
+	}
 	private List<Hashtable<String, Object>> logs;
 	
 	public List<Hashtable<String, Object>> getLogs() {

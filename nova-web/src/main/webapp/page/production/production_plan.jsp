@@ -252,7 +252,7 @@ function selectHotelChrome(option){//为打开的窗口定义方法，让打开�
 		$('#its').val($('#its').val()+','+option);
 	else $('#its').val(option);
 	var it = $('#its').val().split(',').unique3().join(',');
-	alert(it);
+	//alert(it);
 	location.replace('productionitems.do?its='+it);
 }  
 
@@ -295,7 +295,7 @@ function getDataSet(){
 	
 	var production ={};
 	production.manufacturer = $('#manufacturer').val();
-	production.tax = $('#tax').val();
+	production.tax = $('#tax').get(0).checked;  //$('#checkbox-id').attr('checked')
 	production.payBank = $('#payBank').val();
 	production.payNo = $('#payNo').val();
 	production.linkStaff = $('#linkStaff').val();

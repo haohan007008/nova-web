@@ -162,7 +162,7 @@ function order(){
 			str +=  "," + $('#it_'+it).val();
 		else str = $('#it_'+it).val();
 	});
-	alert(str);
+	//alert(str);
 	//alert(parent.$('#mainframe').src);
 	
 	if (window.opener != undefined) { //forchrome   
